@@ -62,39 +62,8 @@ nav:
       - "08 · Interrupts & the RTOS": level-1/08-interrupts.md
       - "09 · Memory & Debugging": level-1/09-memory-debugging.md
       - "10 · Capstone — Smart Sensor Device": level-1/10-capstone-project.md
-  - "Level 2 · Intermediate":
-      - Overview: level-2/index.md
-      - "01 · Stream & Message Buffers": level-2/01-stream-message-buffers.md
-      - "02 · Static Allocation": level-2/02-static-allocation.md
-      - "03 · Tickless Idle & Low Power": level-2/03-tickless-idle-low-power.md
-      - "04 · ESP-IDF FreeRTOS Specifics": level-2/04-esp-idf-freertos.md
-      - "05 · POSIX/Linux Simulation Port": level-2/05-posix-port.md
-      - "06 · Queue Sets & Advanced Queue Patterns": level-2/06-queue-sets-patterns.md
-      - "07 · FreeRTOSConfig.h Deep Dive": level-2/07-freertosconfig-deep-dive.md
-      - "08 · Gatekeeper Tasks & Design Patterns": level-2/08-gatekeeper-patterns.md
-      - "09 · Watchdogs & Task Supervision": level-2/09-watchdogs-supervision.md
-      - "10 · Project — Multi-Sensor Gateway": level-2/10-project-multi-sensor-gateway.md
-  - "Level 3 · Advanced":
-      - Overview: level-3/index.md
-      - "01 · Kernel Internals — Lists & Ready Lists": level-3/01-kernel-internals-lists.md
-      - "02 · Context Switching Deep Dive": level-3/02-context-switching.md
-      - "03 · SMP Scheduling": level-3/03-smp-scheduling.md
-      - "04 · MPU Support & Memory Protection": level-3/04-mpu-memory-protection.md
-      - "05 · Tracing — Tracealyzer & SystemView": level-3/05-tracing-tools.md
-      - "06 · Porting FreeRTOS to a New MCU": level-3/06-porting-freertos.md
-      - "07 · Advanced ISR & Latency Design": level-3/07-advanced-isr-latency.md
-      - "08 · Performance Tuning & Measurement": level-3/08-performance-tuning.md
-      - "09 · Networking — FreeRTOS-Plus-TCP": level-3/09-freertos-plus-tcp.md
-      - "10 · Project — Instrumented RTOS Firmware": level-3/10-project-instrumented-firmware.md
-  - "Level 4 · Master":
-      - Overview: level-4/index.md
-      - "01 · Safety-Certified FreeRTOS (SAFERTOS)": level-4/01-safety-certified-freertos.md
-      - "02 · Formal Timing Analysis (RMA & WCET)": level-4/02-formal-timing-analysis.md
-      - "03 · Production Firmware Architecture": level-4/03-production-architecture.md
-      - "04 · Certification Workflows (IEC 61508 / ISO 26262)": level-4/04-certification-workflows.md
-      - "05 · Secure Firmware & TrustZone": level-4/05-secure-firmware-trustzone.md
-      - "06 · OTA Updates for RTOS Firmware": level-4/06-ota-rtos-firmware.md
-      - "07 · Fault-Tolerant & High-Availability Design": level-4/07-fault-tolerant-design.md
-      - "08 · Multi-Core AMP Architectures": level-4/08-multicore-amp.md
-      - "09 · Long-Term Maintenance & LTS Strategy": level-4/09-lts-maintenance.md
-      - "10 · Capstone — Production RTOS Product": level-4/10-capstone-production-product.md
+# --- auto-pruned stub levels (see AdSense low-value-content fix) ---
+exclude_docs: |
+  level-2/*.md
+  level-3/*.md
+  level-4/*.md

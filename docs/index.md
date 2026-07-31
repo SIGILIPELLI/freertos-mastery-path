@@ -24,9 +24,9 @@ and QEMU are covered as alternatives too.
 | Level | Focus | Modules |
 |-------|-------|---------|
 | [Level 1 · Entry](level-1/index.md) | Why an RTOS, tasks, the scheduler, queues, semaphores & mutexes, software timers, notifications, ISRs, memory & debugging | 9 topics + 1 capstone |
-| [Level 2 · Intermediate](level-2/index.md) | Stream/message buffers, static allocation, tickless idle & low power, ESP-IDF specifics, POSIX port, design patterns | 9 topics + 1 project |
-| [Level 3 · Advanced](level-3/index.md) | Kernel internals, context switching, SMP scheduling, MPU support, tracing, porting, performance tuning | 9 topics + 1 project |
-| [Level 4 · Master](level-4/index.md) | Safety-certified FreeRTOS, formal timing analysis, production architecture, certification workflows, fault tolerance | 9 topics + 1 capstone |
+| Level 2 · Intermediate (coming soon) | Stream/message buffers, static allocation, tickless idle & low power, ESP-IDF specifics, POSIX port, design patterns | 9 topics + 1 project |
+| Level 3 · Advanced (coming soon) | Kernel internals, context switching, SMP scheduling, MPU support, tracing, porting, performance tuning | 9 topics + 1 project |
+| Level 4 · Master (coming soon) | Safety-certified FreeRTOS, formal timing analysis, production architecture, certification workflows, fault tolerance | 9 topics + 1 capstone |
 
 ## How to use this site
 
