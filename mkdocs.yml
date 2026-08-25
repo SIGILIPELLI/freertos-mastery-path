@@ -62,8 +62,19 @@ nav:
       - "08 · Interrupts & the RTOS": level-1/08-interrupts.md
       - "09 · Memory & Debugging": level-1/09-memory-debugging.md
       - "10 · Capstone — Smart Sensor Device": level-1/10-capstone-project.md
+  - "Level 2 · Intermediate":
+      - Overview: level-2/index.md
+      - "Stream & Message Buffers": level-2/01-stream-message-buffers.md
+      - "Static Allocation": level-2/02-static-allocation.md
+      - "Tickless Idle & Low Power": level-2/03-tickless-idle-low-power.md
+      - "ESP-IDF FreeRTOS Specifics": level-2/04-esp-idf-freertos.md
+      - "POSIX/Linux Simulation Port": level-2/05-posix-port.md
+      - "Queue Sets & Advanced Queue Patterns": level-2/06-queue-sets-patterns.md
+      - "FreeRTOSConfig.h Deep Dive": level-2/07-freertosconfig-deep-dive.md
+      - "Gatekeeper Tasks & Design Patterns": level-2/08-gatekeeper-patterns.md
+      - "Watchdogs & Task Supervision": level-2/09-watchdogs-supervision.md
+      - "Project — Multi-Sensor Gateway": level-2/10-project-multi-sensor-gateway.md
 # --- auto-pruned stub levels (see AdSense low-value-content fix) ---
 exclude_docs: |
-  level-2/*.md
   level-3/*.md
   level-4/*.md
