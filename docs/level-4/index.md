@@ -19,7 +19,4 @@ products.
 9. [Long-Term Maintenance & LTS Strategy](09-lts-maintenance.md)
 10. [Capstone — Production RTOS Product](10-capstone-production-product.md)
 
-!!! info "Content status"
-    Level 4 module content is being written — every page below has its
-    scope defined and will be filled in next.
-    [Level 3](../level-3/index.md) is the prerequisite for this level.
+[Level 3](../level-3/index.md) is the prerequisite for this level.
