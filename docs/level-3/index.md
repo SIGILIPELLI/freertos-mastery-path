@@ -18,7 +18,4 @@ a real-time system with professional tools.
 9. [Networking — FreeRTOS-Plus-TCP](09-freertos-plus-tcp.md)
 10. [Project — Instrumented RTOS Firmware](10-project-instrumented-firmware.md)
 
-!!! info "Content status"
-    Level 3 module content is being written — every page below has its
-    scope defined and will be filled in next.
-    [Level 2](../level-2/index.md) is the prerequisite for this level.
+[Level 2](../level-2/index.md) is the prerequisite for this level.
