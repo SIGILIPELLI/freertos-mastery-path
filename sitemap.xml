@@ -52,4 +52,48 @@
          <loc>https://sigilipelli.github.io/freertos-mastery-path/level-1/10-capstone-project/</loc>
          <lastmod>2026-08-25</lastmod>
     </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/01-stream-message-buffers/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/02-static-allocation/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/03-tickless-idle-low-power/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/04-esp-idf-freertos/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/05-posix-port/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/06-queue-sets-patterns/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/07-freertosconfig-deep-dive/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/08-gatekeeper-patterns/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/09-watchdogs-supervision/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
+    <url>
+         <loc>https://sigilipelli.github.io/freertos-mastery-path/level-2/10-project-multi-sensor-gateway/</loc>
+         <lastmod>2026-08-25</lastmod>
+    </url>
 </urlset>

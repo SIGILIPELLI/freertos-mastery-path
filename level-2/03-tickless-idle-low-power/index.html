@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://sigilipelli.github.io/freertos-mastery-path/level-1/03-the-scheduler/">
+        <link rel="canonical" href="https://sigilipelli.github.io/freertos-mastery-path/level-2/03-tickless-idle-low-power/">
       
       
-        <link rel="prev" href="../02-first-tasks/">
+        <link rel="prev" href="../02-static-allocation/">
       
       
-        <link rel="next" href="../04-queues/">
+        <link rel="next" href="../04-esp-idf-freertos/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>03 · The Scheduler - FreeRTOS Mastery Path</title>
+        <title>Tickless Idle & Low Power - FreeRTOS Mastery Path</title>
       
     
     
@@ -64,11 +64,11 @@
   
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="FreeRTOS Mastery Path">
-  <meta property="og:title" content="03 · The Scheduler">
+  <meta property="og:title" content="Tickless Idle & Low Power">
   <meta property="og:description" content="A structured, module-wise FreeRTOS training program from entry level to master level — free, with tasks, queues, semaphores, and real-time design, every example runnable in the free Wokwi ESP32 simulator.">
-  <meta property="og:url" content="https://sigilipelli.github.io/freertos-mastery-path/level-1/03-the-scheduler/">
+  <meta property="og:url" content="https://sigilipelli.github.io/freertos-mastery-path/level-2/03-tickless-idle-low-power/">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="03 · The Scheduler">
+  <meta name="twitter:title" content="Tickless Idle & Low Power">
   <meta name="twitter:description" content="A structured, module-wise FreeRTOS training program from entry level to master level — free, with tasks, queues, semaphores, and real-time design, every example runnable in the free Wokwi ESP32 simulator.">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9440969811959397"
      crossorigin="anonymous"></script>
@@ -92,7 +92,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#03-the-scheduler" class="md-skip">
+        <a href="#tickless-idle-low-power" class="md-skip">
           Skip to content
         </a>
       
@@ -126,7 +126,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              03 · The Scheduler
+              Tickless Idle & Low Power
             
           </span>
         </div>
@@ -275,13 +275,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../level-1/" class="md-tabs__link">
           
   
   
@@ -299,11 +297,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../level-2/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -420,6 +420,380 @@
       
   
   
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../level-1/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 1 · Entry
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Level 1 · Entry
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/01-why-an-rtos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 · Why an RTOS?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/02-first-tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 · Your First Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/03-the-scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 · The Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/04-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 · Queues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/05-semaphores-mutexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 · Semaphores & Mutexes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/06-software-timers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 · Software Timers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/07-notifications-event-groups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 · Task Notifications & Event Groups
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/08-interrupts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    08 · Interrupts & the RTOS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/09-memory-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    09 · Memory & Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../level-1/10-capstone-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 · Capstone — Smart Sensor Device
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -467,7 +841,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -478,7 +852,7 @@
   <span class="md-ellipsis">
     
   
-    Level 1 · Entry
+    Level 2 · Intermediate
   
 
     
@@ -489,18 +863,18 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Level 1 · Entry
+    Level 2 · Intermediate
   
 
           </label>
@@ -515,14 +889,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-why-an-rtos/" class="md-nav__link">
+      <a href="../01-stream-message-buffers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    01 · Why an RTOS?
+    Stream & Message Buffers
   
 
     
@@ -543,14 +917,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../02-first-tasks/" class="md-nav__link">
+      <a href="../02-static-allocation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    02 · Your First Tasks
+    Static Allocation
   
 
     
@@ -587,7 +961,7 @@
   <span class="md-ellipsis">
     
   
-    03 · The Scheduler
+    Tickless Idle & Low Power
   
 
     
@@ -605,7 +979,7 @@
   <span class="md-ellipsis">
     
   
-    03 · The Scheduler
+    Tickless Idle & Low Power
   
 
     
@@ -631,38 +1005,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-one-rule-and-preemption" class="md-nav__link">
+  <a href="#how-it-works-suppressing-the-tick" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The one rule, and preemption
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The one rule, and preemption">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#assigning-priorities-sensibly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Assigning priorities sensibly
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-tick-and-time-slicing-between-equals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The tick, and time slicing between equals
+        How it works: suppressing the tick
       
     </span>
   </a>
@@ -670,10 +1016,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-idle-task-and-starvation" class="md-nav__link">
+  <a href="#application-hooks-around-sleep" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The idle task, and starvation
+        Application hooks around sleep
       
     </span>
   </a>
@@ -681,10 +1027,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#esp32-two-cores" class="md-nav__link">
+  <a href="#the-interrupt-latency-tradeoff" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ESP32: two cores
+        The interrupt-latency tradeoff
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#traps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traps
       
     </span>
   </a>
@@ -729,381 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../04-queues/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    04 · Queues
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../05-semaphores-mutexes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    05 · Semaphores & Mutexes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../06-software-timers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    06 · Software Timers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../07-notifications-event-groups/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    07 · Task Notifications & Event Groups
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../08-interrupts/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    08 · Interrupts & the RTOS
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../09-memory-debugging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    09 · Memory & Debugging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../10-capstone-project/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    10 · Capstone — Smart Sensor Device
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../level-2/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Level 2 · Intermediate
-  
-
-    
-  </span>
-  
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Level 2 · Intermediate
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../level-2/01-stream-message-buffers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stream & Message Buffers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../level-2/02-static-allocation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Static Allocation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../level-2/03-tickless-idle-low-power/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Tickless Idle & Low Power
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../level-2/04-esp-idf-freertos/" class="md-nav__link">
+      <a href="../04-esp-idf-freertos/" class="md-nav__link">
         
   
   
@@ -1131,7 +1114,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../level-2/05-posix-port/" class="md-nav__link">
+      <a href="../05-posix-port/" class="md-nav__link">
         
   
   
@@ -1159,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../level-2/06-queue-sets-patterns/" class="md-nav__link">
+      <a href="../06-queue-sets-patterns/" class="md-nav__link">
         
   
   
@@ -1187,7 +1170,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../level-2/07-freertosconfig-deep-dive/" class="md-nav__link">
+      <a href="../07-freertosconfig-deep-dive/" class="md-nav__link">
         
   
   
@@ -1215,7 +1198,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../level-2/08-gatekeeper-patterns/" class="md-nav__link">
+      <a href="../08-gatekeeper-patterns/" class="md-nav__link">
         
   
   
@@ -1243,7 +1226,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../level-2/09-watchdogs-supervision/" class="md-nav__link">
+      <a href="../09-watchdogs-supervision/" class="md-nav__link">
         
   
   
@@ -1271,7 +1254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../level-2/10-project-multi-sensor-gateway/" class="md-nav__link">
+      <a href="../10-project-multi-sensor-gateway/" class="md-nav__link">
         
   
   
@@ -1326,38 +1309,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-one-rule-and-preemption" class="md-nav__link">
+  <a href="#how-it-works-suppressing-the-tick" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The one rule, and preemption
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The one rule, and preemption">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#assigning-priorities-sensibly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Assigning priorities sensibly
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-tick-and-time-slicing-between-equals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The tick, and time slicing between equals
+        How it works: suppressing the tick
       
     </span>
   </a>
@@ -1365,10 +1320,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-idle-task-and-starvation" class="md-nav__link">
+  <a href="#application-hooks-around-sleep" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The idle task, and starvation
+        Application hooks around sleep
       
     </span>
   </a>
@@ -1376,10 +1331,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#esp32-two-cores" class="md-nav__link">
+  <a href="#the-interrupt-latency-tradeoff" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ESP32: two cores
+        The interrupt-latency tradeoff
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#traps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traps
       
     </span>
   </a>
@@ -1428,192 +1394,158 @@
   
 
 
-<h1 id="03-the-scheduler">03 · The Scheduler<a class="headerlink" href="#03-the-scheduler" title="Permanent link">&para;</a></h1>
-<p>The scheduler is the heart of the kernel: the piece of code that decides, at
-every moment, which task owns the CPU. Its rule is short enough to memorize —
-<strong>the highest-priority Ready task runs, always</strong> — but the consequences
-(preemption, time slicing, starvation, the idle task) are where real
-firmware behavior is decided. This module makes the rule concrete, shows what
-happens between equal-priority tasks, and covers the ESP32's dual-core twist.</p>
-<h2 id="the-one-rule-and-preemption">The one rule, and preemption<a class="headerlink" href="#the-one-rule-and-preemption" title="Permanent link">&para;</a></h2>
-<p>FreeRTOS priorities run from <strong>0 (lowest)</strong> to <code>configMAX_PRIORITIES - 1</code>
-(24 on ESP32 Arduino). At every scheduling decision, the kernel runs the
-highest-priority task that is <strong>Ready</strong>. If a higher-priority task <em>becomes</em>
-Ready — its delay expires, its queue receives data, an ISR signals it — the
-running task is <strong>preempted immediately</strong>, mid-statement, and the
-higher-priority task runs. No politeness, no waiting for a yield.</p>
-<p>Watch it happen:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">lowTask</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;low: starting a long computation...&quot;</span><span class="p">);</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">300</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">        </span><span class="c1">// 300 ms of BUSY work (no blocking)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;low: ...finished&quot;</span><span class="p">);</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">vTaskDelay</span><span class="p">(</span><span class="n">pdMS_TO_TICKS</span><span class="p">(</span><span class="mi">500</span><span class="p">));</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="kt">void</span><span class="w"> </span><span class="nf">highTask</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="n">vTaskDelay</span><span class="p">(</span><span class="n">pdMS_TO_TICKS</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span><span class="w">        </span><span class="c1">// wakes every 100 ms</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;        HIGH ran at %lu ms</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">millis</span><span class="p">());</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">}</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="n">xTaskCreate</span><span class="p">(</span><span class="n">lowTask</span><span class="p">,</span><span class="w">  </span><span class="s">&quot;low&quot;</span><span class="p">,</span><span class="w">  </span><span class="mi">2048</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">  </span><span class="n">xTaskCreate</span><span class="p">(</span><span class="n">highTask</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;high&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w">   </span><span class="c1">// higher priority</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="p">}</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">vTaskDelay</span><span class="p">(</span><span class="n">portMAX_DELAY</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<h1 id="tickless-idle-low-power">Tickless Idle &amp; Low Power<a class="headerlink" href="#tickless-idle-low-power" title="Permanent link">&para;</a></h1>
+<p>By default FreeRTOS wakes the CPU on every tick interrupt — typically every
+1 ms — whether or not any task needs to run. On a battery-powered device
+that "wake up, check, go back to sleep" cycle can dominate power draw even
+when the system is 99% idle. <strong>Tickless idle</strong> mode lets the idle task tell
+the hardware "nothing is scheduled for the next N ticks — stop the tick
+interrupt and let the CPU sleep for real," waking exactly when the next
+timer or event actually needs attention.</p>
+<h2 id="how-it-works-suppressing-the-tick">How it works: suppressing the tick<a class="headerlink" href="#how-it-works-suppressing-the-tick" title="Permanent link">&para;</a></h2>
+<p>Normally the idle task just spins (<code>portSUPPRESS_TICKS_AND_SLEEP</code> never
+called). With tickless idle enabled, when the scheduler determines no task
+is ready and finds the next unblock time is more than one tick away, it
+calls into <code>portSUPPRESS_TICKS_AND_SLEEP()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// FreeRTOSConfig.h</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#define configUSE_TICKLESS_IDLE  1   </span><span class="c1">// 1 = whenever possible, 2 = ESP-IDF&#39;s &quot;always&quot; style variant</span>
 </code></pre></div>
-<p>The output shows <code>HIGH ran at ...</code> lines appearing every 100 ms <em>right
-through the middle</em> of low's 300 ms computation. The low task never
-volunteered — the tick interrupt noticed high's delay had expired, and the
-scheduler swapped tasks in a few microseconds. That context switch —
-saving low's registers, restoring high's — is the mechanism behind
-everything an RTOS promises.</p>
-<h3 id="assigning-priorities-sensibly">Assigning priorities sensibly<a class="headerlink" href="#assigning-priorities-sensibly" title="Permanent link">&para;</a></h3>
-<p>Priorities encode <strong>urgency (deadline tightness), not importance</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Priority</th>
-<th>Typical residents</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>High (5+)</td>
-<td>Tight-deadline work triggered by ISRs; motor/control loops</td>
-</tr>
-<tr>
-<td>Medium (2-4)</td>
-<td>Sensor sampling, protocol handling, application logic</td>
-</tr>
-<tr>
-<td>Low (1)</td>
-<td>Logging, display refresh, <code>loop()</code> (Arduino puts it at 1)</td>
-</tr>
-<tr>
-<td>0</td>
-<td>Idle task lives here — avoid putting your tasks at 0</td>
-</tr>
-</tbody>
-</table>
-<p>Rule of thumb (rate-monotonic): <strong>the shorter a task's period/deadline, the
-higher its priority.</strong> And keep high-priority tasks <em>short</em> — they run at the
-expense of everyone below.</p>
-<h2 id="the-tick-and-time-slicing-between-equals">The tick, and time slicing between equals<a class="headerlink" href="#the-tick-and-time-slicing-between-equals" title="Permanent link">&para;</a></h2>
-<p>A hardware timer fires the <strong>tick interrupt</strong> at <code>configTICK_RATE_HZ</code> —
-<strong>1000 Hz on ESP32 Arduino</strong>, so one tick = 1 ms (this is why
-<code>pdMS_TO_TICKS</code> exists: on a 100 Hz build, 1 tick = 10 ms and delays are
-rounded accordingly). The tick wakes expired delays and drives scheduling
-decisions.</p>
-<p>When several tasks share the <em>same</em> priority and are all Ready, FreeRTOS
-<strong>time-slices</strong> them: each tick, the scheduler rotates to the next
-equal-priority Ready task (round-robin). They appear to run "in parallel,"
-interleaved at 1 ms granularity. Tasks can also hand over early:
-<code>taskYIELD()</code> says "I'm done for now — if another task of my priority is
-Ready, switch to it" (it never gives the CPU to <em>lower</em> priority tasks).</p>
-<h2 id="the-idle-task-and-starvation">The idle task, and starvation<a class="headerlink" href="#the-idle-task-and-starvation" title="Permanent link">&para;</a></h2>
-<p>When <em>no</em> application task is Ready — everyone's Blocked — the scheduler
-runs the <strong>idle task</strong>, a priority-0 task the kernel creates automatically.
-It cleans up deleted tasks' memory and, when configured, puts the CPU into a
-low-power state. The ESP32 also uses idle time to feed a watchdog.</p>
-<p><strong>Starvation</strong> is the classic scheduler bug: a task that never blocks starves
-everything below it — forever, not just "slows it down."</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">greedy</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="c1">// compute, compute, compute — never blocks</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+<p>The sequence, per the portable layer's default implementation:</p>
+<ol>
+<li>Idle task runs, scheduler computes <code>xExpectedIdleTime</code> — how many ticks
+   until the next task is due to wake (from a delay, timer, or blocked
+   queue timeout).</li>
+<li>If that's below <code>configEXPECTED_IDLE_TIME_BEFORE_SLEEP</code> (default varies
+   by port), it's not worth the sleep/wake overhead — busy-idle as normal.</li>
+<li>Otherwise, the port stops the periodic tick source, reconfigures a
+   single-shot low-power timer for the expected idle duration, and puts the
+   core into a sleep mode (<code>WFI</code>, or a deeper low-power state on ports that
+   support it).</li>
+<li>On wake (either the low-power timer firing, or any other interrupt), the
+   port corrects <code>xTickCount</code> for the number of ticks that were "missed"
+   while asleep, based on how long the CPU actually slept, then resumes
+   normal ticking.</li>
+</ol>
+<p>That correction step is exactly why this needs port-specific support: the
+kernel must know how to read elapsed time from a hardware timer that kept
+running (or can report elapsed time) through the sleep, and it must
+guarantee no interrupt is lost in the process.</p>
+<h2 id="application-hooks-around-sleep">Application hooks around sleep<a class="headerlink" href="#application-hooks-around-sleep" title="Permanent link">&para;</a></h2>
+<p>Two hooks let application code participate in the sleep decision and in
+power-domain management:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Optional: veto or shorten a sleep, e.g. because a peripheral transaction</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// is mid-flight and must not be interrupted by a clock change.</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">vApplicationDeepSleepHook</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uartTransactionInFlight</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="c1">// some ports check a global/flag here instead of a dedicated hook —</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="c1">// consult your port&#39;s documentation for the exact veto mechanism</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1">// Called by the port immediately before/after actually sleeping —</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">// typical use: switch peripheral clocks, disable unneeded domains.</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="kt">void</span><span class="w"> </span><span class="nf">vApplicationSleepPriorToSleep</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">disable_unneeded_peripherals</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="kt">void</span><span class="w"> </span><span class="nf">vApplicationSleepAfterSleep</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="n">restore_peripheral_clocks</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<p>At priority 2, <code>greedy</code> permanently freezes every priority-1 and 0 task: the
-<code>loop()</code> task, your logger, and the idle task. On ESP32 the symptom is
-dramatic — the <strong>idle task watchdog</strong> fires and prints
-<code>Task watchdog got triggered</code> because idle never got to feed it. The fix is
-never <code>taskYIELD()</code> (that only helps <em>equal</em> priorities) — the fix is making
-the task <strong>block</strong>: on a delay, a queue, or a notification. In a preemptive
-RTOS, blocking is not lost time; it is how you <em>donate</em> time downward.</p>
-<h2 id="esp32-two-cores">ESP32: two cores<a class="headerlink" href="#esp32-two-cores" title="Permanent link">&para;</a></h2>
-<p>The ESP32 has two cores (0 and 1), and its FreeRTOS schedules across both —
-the rule becomes "on each core, run the highest-priority Ready task allowed
-to run there." Arduino's <code>setup()</code>/<code>loop()</code> run on <strong>core 1</strong>; WiFi and
-Bluetooth stacks run mostly on <strong>core 0</strong>. <code>xTaskCreate</code> lets the task run
-on either core; to control placement use:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">xTaskCreatePinnedToCore</span><span class="p">(</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">taskFn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ctrl&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="mi">1</span><span class="w">                 </span><span class="c1">// core id: 0, 1, or tskNO_AFFINITY (either core)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">);</span>
+<p>Exact hook names and availability are port-specific (ESP-IDF, for example,
+layers its own power-management API — <code>esp_pm_configure()</code> — on top of
+this rather than exposing the raw hooks above). Always check your port's
+<code>port.c</code> for the precise integration points before relying on a hook name.</p>
+<h2 id="the-interrupt-latency-tradeoff">The interrupt-latency tradeoff<a class="headerlink" href="#the-interrupt-latency-tradeoff" title="Permanent link">&para;</a></h2>
+<p>Waking from a deep sleep state is not free — it costs cycles to restore
+clocks, PLLs, and peripheral state before the CPU can service an interrupt.
+That directly increases worst-case interrupt latency, which matters if the
+system has a hard real-time deadline on an external event:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Trade: allow tickless idle, but never let it choose a sleep depth</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">// deeper than what your worst-case interrupt-latency budget allows.</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="cp">#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP  2   </span><span class="c1">// ticks — tune, don&#39;t guess</span>
 </code></pre></div>
-<p>Pinning matters when you need cache locality, when a library demands a
-specific core, or when you want your control loop unaffected by WiFi bursts
-(pin it to core 1). It also means <strong>two tasks really can run
-simultaneously</strong> — a mental-model upgrade that makes the data-sharing tools
-of the next two modules non-optional, not just polite. Everything else in
-this level works identically with or without pinning; Level 2's ESP-IDF
-module digs into the dual-core details.</p>
+<p>A system with a 1 ms hard deadline on a GPIO interrupt cannot afford a
+sleep mode with a 5 ms wake latency, even if it saves substantial power —
+measure your specific low-power state's wake latency against your tightest
+ISR deadline before enabling anything deeper than the shallowest sleep
+mode your platform offers.</p>
+<h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Assuming tick-based delays stay tick-accurate across a sleep</strong>: the
+  kernel corrects <code>xTickCount</code> for elapsed sleep time, but any code reading
+  a <em>hardware</em> timer/counter directly during that window (not going
+  through the RTOS tick) may see a discontinuity if that timer itself was
+  gated during sleep. Route all timing through <code>xTaskGetTickCount()</code> or an
+  always-running hardware timer, never a clock that pauses.</li>
+<li><strong><code>configUSE_TICKLESS_IDLE</code> alone does nothing without port support</strong>:
+  not every FreeRTOS port implements <code>portSUPPRESS_TICKS_AND_SLEEP</code> — on
+  ports without it, the macro compiles but the idle task never actually
+  sleeps deeper than a <code>WFI</code>/spin. Check the port layer, not just the
+  config header.</li>
+<li><strong>Priority inversion via missed ticks</strong>: a task blocked with a short
+  relative timeout (<code>pdMS_TO_TICKS(2)</code>) can wake later than expected if the
+  system just entered a deep sleep and the wake-up correction has coarser
+  granularity than the timeout itself — don't rely on sub-tick timing
+  precision immediately after a tickless sleep window.</li>
+<li><strong>Peripheral clocks disabled mid-transaction</strong>: entering a deep sleep
+  mode that gates a peripheral clock while a DMA transfer or UART byte is
+  still in flight corrupts that transfer. Use the deep-sleep veto hook (or
+  your port's equivalent) to hold off sleep during active I/O.</li>
+<li><strong>Debugging is harder</strong>: many debuggers/JTAG probes lose the target (or
+  show it as unresponsive) once the core clock stops in a deep sleep state.
+  Keep a build variant with tickless idle disabled for active debugging
+  sessions.</li>
+</ul>
 <h2 id="cheat-sheet">Cheat sheet<a class="headerlink" href="#cheat-sheet" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Concept / API</th>
-<th>Meaning</th>
+<th>Config / API</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Scheduling rule</td>
-<td>Highest-priority <strong>Ready</strong> task runs — immediately, via preemption</td>
+<td><code>configUSE_TICKLESS_IDLE</code></td>
+<td>0 = classic ticking idle; 1 = sleep when idle time allows; 2 = ESP-IDF variant, more aggressive</td>
 </tr>
 <tr>
-<td>Priorities</td>
-<td>0 = lowest (idle); ESP32 Arduino: up to 24; <code>loop()</code> runs at 1</td>
+<td><code>configEXPECTED_IDLE_TIME_BEFORE_SLEEP</code></td>
+<td>Minimum idle ticks before it's worth sleeping at all</td>
 </tr>
 <tr>
-<td>Priority heuristic</td>
-<td>Shorter deadline → higher priority; keep high-prio tasks short</td>
+<td><code>portSUPPRESS_TICKS_AND_SLEEP(ticks)</code></td>
+<td>Port-layer function that actually performs the sleep + tick correction</td>
 </tr>
 <tr>
-<td>Tick</td>
-<td>1000 Hz on ESP32 Arduino (1 tick = 1 ms); drives delays &amp; time slicing</td>
+<td><code>xTaskGetTickCount()</code></td>
+<td>Always correct across sleeps — use for all app-level timing</td>
 </tr>
 <tr>
-<td>Time slicing</td>
-<td>Equal-priority Ready tasks round-robin each tick</td>
+<td><code>vApplicationSleepPriorToSleep/AfterSleep</code></td>
+<td>Hooks to gate/restore peripherals around a sleep</td>
 </tr>
 <tr>
-<td><code>taskYIELD()</code></td>
-<td>Offer CPU to <em>equal</em>-priority tasks now (never to lower)</td>
+<td><code>esp_pm_configure()</code> (ESP-IDF)</td>
+<td>Higher-level power-management config layered over tickless idle</td>
 </tr>
 <tr>
-<td>Idle task</td>
-<td>Priority-0 kernel task; runs when nothing else is Ready; feeds ESP32 idle watchdog</td>
-</tr>
-<tr>
-<td>Starvation</td>
-<td>A never-blocking task freezes all lower priorities — fix by blocking, not yielding</td>
-</tr>
-<tr>
-<td><code>xTaskCreatePinnedToCore(..., core)</code></td>
-<td>ESP32: pin a task to core 0 or 1 (<code>tskNO_AFFINITY</code> = either)</td>
+<td>Interrupt latency</td>
+<td>Deeper sleep = higher wake latency — bound by your tightest ISR deadline</td>
 </tr>
 </tbody>
 </table>
 <h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Run the preemption demo above and confirm <code>HIGH</code> lines appear during
-   low's busy-wait. Then set both tasks to priority 1 — explain what you now
-   see (hint: with a 1000 Hz tick, does time slicing let <code>high</code> still run
-   during the busy loop? Why is it now late?).</li>
-<li>Create the <code>greedy</code> task at priority 2 alongside a priority-1 blinker.
-   Observe the blinker freeze and the watchdog complaint in the serial
-   monitor. Fix it with a single <code>vTaskDelay(1)</code> and confirm recovery.</li>
-<li>Pin two busy-ish tasks (each printing its core via <code>xPortGetCoreID()</code>)
-   to core 0 and core 1 respectively, then to the <em>same</em> core, and compare
-   the interleaving of their output.</li>
+<li>Enable <code>configUSE_TICKLESS_IDLE</code> on a port that supports it (ESP-IDF or
+   a Cortex-M port with tickless support) on an otherwise-idle system with
+   one task blocked on <code>vTaskDelay(pdMS_TO_TICKS(2000))</code>. Measure current
+   draw (or, without hardware, log actual wake timestamps) with tickless
+   idle on vs. off.</li>
+<li>Add a hard real-time task that must respond to a GPIO interrupt within
+   1 ms. Measure observed interrupt latency with tickless idle enabled at
+   your platform's deepest sleep mode, and again at its shallowest. State
+   which sleep depth you'd ship for this deadline.</li>
+<li>Simulate an in-flight UART transaction that must not be interrupted by
+   a clock-domain change: add the veto/hook logic and confirm the system
+   holds off sleeping until the transaction completes, then sleeps
+   immediately after.</li>
 </ol>
 
 
