@@ -1,8 +1,8 @@
 site_name: FreeRTOS Mastery Path
 site_description: A structured, module-wise FreeRTOS training program from entry level to master level — tasks, queues, semaphores, interrupts, and real-time design, every example runnable free in the Wokwi ESP32 simulator, no hardware required.
-site_url: https://sigilipelli.github.io/freertos-mastery-path/
-repo_url: https://github.com/SIGILIPELLI/freertos-mastery-path
-repo_name: freertos-mastery-path
+site_url: https://sigilipelli.github.io/freertos-skillmastery/
+repo_url: https://github.com/SIGILIPELLI/freertos-skillmastery
+repo_name: freertos-skillmastery
 
 theme:
   name: material
