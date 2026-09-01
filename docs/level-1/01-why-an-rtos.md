@@ -34,7 +34,7 @@ void loop() {
 The timings are already entangled: change the blink rate and the print rate
 changes too. Experienced Arduino programmers fix this with `millis()`-based
 cooperative scheduling (covered in depth in the
-[Embedded Systems Mastery Path](https://sigilipelli.github.io/embedded-skillmastery/)),
+[Embedded Systems Mastery Path](https://sigilipelli.github.io/embedded-mastery-path/)),
 which works well — but it has structural limits:
 
 - **One slow job stalls everything.** If parsing a command or writing to

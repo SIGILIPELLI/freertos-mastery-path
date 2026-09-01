@@ -17,7 +17,7 @@ microcontroller. If you'd rather study pure C on a PC, the
 and QEMU are covered in Module 1 as alternatives.
 
 New to the ESP32 or Arduino itself? Skim Level 1 of the sibling
-[Embedded Systems Mastery Path](https://sigilipelli.github.io/embedded-skillmastery/)
+[Embedded Systems Mastery Path](https://sigilipelli.github.io/embedded-mastery-path/)
 first — it covers boards, GPIO, and serial from scratch, so this site can
 stay focused on the RTOS layer.
 
