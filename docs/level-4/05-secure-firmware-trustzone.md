@@ -79,6 +79,25 @@ bypassable, the entire TrustZone partition built on top of it provides no
 real security guarantee regardless of how correctly the application-level
 code uses it.
 
+## How It Actually Works
+
+Concretely, each Non-secure task's TCB gains one extra field on a
+TrustZone-aware port: a pointer to that task's Secure-side context slot
+(allocated the first time the task calls into Secure code, via
+`secureportALLOCATE_SECURE_CONTEXT`). The normal context switch already
+saves the Non-secure stack pointer and registers into the outgoing task's
+TCB and restores the incoming task's from its TCB — the TrustZone addition
+is that the same switch routine also swaps which Secure-side stack the
+`SecureContext_SaveContext` / `SecureContext_LoadContext` calls will use
+next, keyed off that same TCB. So if the tick interrupt fires and preempts
+a task mid-way through a Secure-world call, the switch doesn't just save
+"where the Non-secure code was" — it saves "where inside the Secure world
+this specific task's call was," and no other task's Secure context pointer
+is touched. Get the ordering wrong (switch Non-secure context without also
+switching the Secure context pointer) and a second task's Secure-side
+call can execute against the first task's leftover Secure stack — a
+concrete, exploitable consequence of a plain-looking TCB bookkeeping bug.
+
 ## Traps
 
 - **Treating TrustZone as a drop-in replacement for MPU-based task

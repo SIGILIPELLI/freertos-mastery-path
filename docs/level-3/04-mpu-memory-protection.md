@@ -102,6 +102,26 @@ instant `MemManage` fault at the exact instruction that overran — a strictly
 stronger and earlier guarantee than the pattern-based check alone, at the
 cost of consuming one of the limited MPU regions per task.
 
+## How It Actually Works (the region-swap on every switch)
+
+FreeRTOS-MPU works by reprogramming the Cortex-M's Memory Protection Unit
+region registers as part of every context switch to an unprivileged task —
+each MPU-aware TCB carries its own small table of region base/size/
+permission settings (its private stack, plus any explicitly shared regions),
+and `vTaskSwitchContext`'s successor in the MPU port writes that table into
+the MPU hardware registers before the task resumes, so one task's stack
+memory is physically inaccessible (a hard fault, not a silent bug) to
+another task's unprivileged code even though both live in the same flat
+physical address space. A task only escalates to privileged mode through a
+narrow, deliberate gate — a supervisor call (`svc` instruction) trapping into
+a handler the kernel controls — which is precisely why this is "protection
+against accidental corruption," not general security: any code that finds a
+way to trigger that same trap, or that was already linked as privileged, sees
+the whole address space. The stack-overflow connection is mechanical: a
+correctly configured MPU region around a task's stack turns an overflow that
+would otherwise silently corrupt an adjacent TCB into an immediate, precisely
+attributable memory-fault exception at the moment the boundary is crossed.
+
 ## Traps
 
 - **Assuming `configENABLE_MPU` provides isolation without also auditing

@@ -222,6 +222,26 @@ void app_init(void) {
    confirm the same steady-state and back-pressure behavior is observable
    without any real hardware attached.
 
+## How It Actually Works
+
+This project's architecture is a direct composition of three kernel
+mechanisms working together, and understanding their interaction is the
+real lesson. Each sensor task blocks on its own timing (`vTaskDelay`) and
+pushes readings into a queue that's a member of the queue set — under the
+hood this means every send also pushes a handle onto the set's internal
+queue, which is what lets the single consumer task block in one place
+(`xQueueSelectFromSet`) instead of polling N queues. The gatekeeper owns the
+radio exclusively, so contention for the radio never needs a mutex or its
+priority-inheritance bookkeeping — the queue feeding the gatekeeper already
+serializes every caller via the same critical section that protects any
+queue send. Watchdog supervision sits outside both of these data paths
+entirely: it doesn't inspect queue contents, only whether each sensor task's
+liveness token has advanced, so a sensor that's alive but stuck retrying a
+failed read (still updating its token) will *not* trip the watchdog even
+though its data has stopped flowing — worth remembering when you extend the
+system, since liveness and correctness are checked by genuinely different
+mechanisms here.
+
 ## Stretch goals
 
 Pick at least two:

@@ -118,6 +118,24 @@ for measuring real timing on target hardware.
   simulator is a design/logic gate, not a hardware sign-off — treat a
   passing simulator run as "ready to try on real hardware," not "done."
 
+## How It Actually Works
+
+The POSIX/Linux simulator doesn't schedule your tasks on real interrupt
+hardware at all — it maps each FreeRTOS "task" onto a genuine **pthread**,
+and simulates preemption using `SIGALRM`/signal delivery at the configured
+tick rate to invoke the same `vTaskSwitchContext` logic, while an internal
+mutex/condition-variable pair stands in for the actual context-switch
+register save/restore a real MCU port performs in assembly. This is why the
+port is genuinely useful for testing queue/semaphore/task-priority *logic* —
+the state-list bookkeeping (Ready lists, Blocked lists, priority ordering)
+is identical C code to every other port — but not for timing: Linux's own
+scheduler and the OS's own preemption of your simulated "ISRs" introduce
+jitter no real embedded tick timer has, and there is no simulated interrupt
+controller, no real memory-mapped peripheral timing, and no actual context-
+switch cycle cost to measure. Anything you verify here about *what happens*
+(does the high-priority task preempt, does priority inheritance kick in) is
+trustworthy; anything about *how fast* is not.
+
 ## Cheat sheet
 
 | Aspect | Real hardware port | POSIX simulator port |

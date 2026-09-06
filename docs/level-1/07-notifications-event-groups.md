@@ -178,6 +178,27 @@ module.
 | `xEventGroupWaitBits(eg, bits, clearOnExit, waitAll, timeout)` | Block on ANY/ALL combinations; returns bits at wake |
 | `xEventGroupGetBits(eg)` | Peek current bits without blocking |
 
+## How It Actually Works
+
+A task notification is the cheapest signaling primitive in FreeRTOS because
+it needs **no separate kernel object at all** — every TCB already has a
+built-in 32-bit `ulNotifiedValue` and a `eNotifyState` field baked into the
+struct `xTaskCreate` allocates. `xTaskNotifyGive`/`vTaskNotify` write directly
+into the target TCB's own memory and, if that task was blocked waiting
+(`ulTaskNotifyTake`/`xTaskNotifyWait` parked it on no list at all — it's just
+a special Blocked state checked on wake), move it straight to Ready. Compare
+that to a semaphore give: `xSemaphoreGive` still has to touch a queue
+structure, walk a waiting list, and copy state — a notification skips every
+step, which is why the docs measure it at roughly 45% faster and using less
+RAM than an equivalent binary semaphore. Event groups trade that speed for
+expressiveness: an `EventGroupHandle_t` is a small struct holding one bit
+field (24 usable bits) and its own list of tasks waiting on specific bit
+patterns; `xEventGroupSetBits` walks that list checking each waiter's
+AND/OR mask against the new bits, and — because clearing-on-exit and
+"wait for ALL bits" both require inspecting every waiter together — this set
+operation, unlike a queue send, briefly enters a critical section so no
+half-updated bit pattern is ever observed by two waiters differently.
+
 ## Exercise
 
 1. Take your Module 5 exercise (trigger + worker via binary semaphore) and

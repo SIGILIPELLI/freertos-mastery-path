@@ -242,6 +242,24 @@ Run each check in Wokwi and tick it off:
    parsing or alarm printing, because it lives on the timer task and nothing
    in the system blocks for long. *(Module 3's promise, delivered.)*
 
+## How It Actually Works
+
+This capstone puts several kernel mechanisms to work simultaneously, which is
+exactly where scheduling bugs hide in real firmware. Every task you created
+sits in its own Ready-list slot until it blocks (on `vTaskDelay`, a queue, or
+a semaphore) — at that instant it moves onto a Blocked/Delayed list and the
+scheduler's `vTaskSwitchContext()` picks the next-highest-priority Ready task,
+which is why the ISR-driven and sensor tasks can appear to run "at once" on a
+single core: each context switch is only a few microseconds, invisible at
+human timescales. The queue linking your producer task to your consumer task
+is the same fixed-size ring buffer covered in module 4 — if the consumer runs
+at lower priority and falls behind, the queue fills and `xQueueSend` blocks
+the producer, which is the kernel's built-in backpressure rather than a bug
+to work around. If you added a mutex around shared state, remember its
+priority-inheritance bookkeeping is only engaged while a *higher*-priority
+task is actually waiting on it — briefly holding a mutex from your
+lowest-priority task while nothing else contends for it costs nothing extra.
+
 ## Exercise — extensions
 
 Pick at least two:

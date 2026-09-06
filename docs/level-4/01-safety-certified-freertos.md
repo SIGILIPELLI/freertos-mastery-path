@@ -97,6 +97,34 @@ fine." This is why safety-certified kernels commonly restrict or exclude:
   code, in favor of code shaped for easier static analysis and worst-case
   execution time bounding (Level 4 Module 2).
 
+## How It Actually Works
+
+The reason a certified kernel's internals matter is that the certificate is
+really a claim about the **scheduler's own control data**, not about the
+application built on top of it. Standard FreeRTOS represents every task as
+a Task Control Block (TCB) holding its stack pointer, priority, and state,
+and moves that TCB between Ready lists (one per priority level), a Blocked
+list, and per-object waiting lists as timers expire and queues/semaphores
+are given. SAFERTOS keeps the same conceptual model — priority-based
+preemptive scheduling, a tick interrupt driving delay expiry and
+round-robin time slicing among equal priorities — but its implementation of
+that model is written and verified to a much stricter standard: every path
+that touches a TCB or a Ready/Blocked list is bounded, has a documented
+worst-case execution time, and avoids the recursive or dynamically-sized
+control flow that makes worst-case analysis (Level 4 Module 2) intractable.
+
+This is also where priority inheritance becomes a certification-relevant
+detail rather than a convenience feature. In standard FreeRTOS, a mutex
+holder's priority is boosted when a higher-priority task blocks on that
+mutex, precisely by editing the holder's TCB priority field and re-sorting
+Ready-list membership — a small, well-understood piece of bookkeeping. A
+safety-certified kernel must be able to *bound* how long that inheritance
+can extend a low-priority task's runtime, because an unbounded priority
+inversion is exactly the kind of "usually fine" behavior certification
+bodies won't accept without evidence. That's a direct line from a Level 1
+scheduling mechanism to a Level 4 certification requirement: the same TCB
+field, but now with a proof obligation attached.
+
 ## Traps
 
 - **Assuming "runs the same code as FreeRTOS" means "inherits FreeRTOS's

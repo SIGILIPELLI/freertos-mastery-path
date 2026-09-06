@@ -102,6 +102,32 @@ opportunity at its timeout branch — treating a timeout as "just retry
 silently" throws away a detection signal that a supervisor or safe-state
 mechanism could otherwise use.
 
+## How It Actually Works
+
+The `pdMS_TO_TICKS(50)` timeout in `xQueueReceive` is meaningful because of
+how blocking actually works at the kernel level: calling it on an empty
+queue moves the calling task's TCB off the Ready list and onto that
+queue's blocked-task list, *and* onto a delayed-task list keyed to expire
+after 50 ticks. Two independent events can bring the task back to Ready —
+whichever happens first: the tick interrupt's delay-list scan finds the
+50-tick timer expired (this is the fault path, `ok != pdTRUE`), or another
+task/ISR calls `xQueueSend`, which walks the queue's blocked list, finds
+this TCB, and moves it back to Ready with data in hand. The timeout branch
+isn't a special case bolted onto queues — it's the ordinary tick-interrupt
+delay mechanism, repurposed as a liveness detector for "did the expected
+event happen within its deadline."
+
+This is also why watchdog-style supervisor tasks work as a redundancy
+pattern: a supervisor task blocked with a timeout on a periodic "I'm alive"
+signal from a worker task is using the exact same TCB-and-blocked-list
+mechanism as the control loop above, just pointed at a heartbeat instead of
+sensor data. If the worker's TCB never gets scheduled at all (stuck in a
+tight loop, or genuinely crashed), the supervisor's delayed-list entry
+still expires on schedule — because the tick interrupt's bookkeeping is
+independent of whatever the worker task is or isn't doing — giving the
+supervisor a way to detect a hang precisely because the tick mechanism
+never depends on the health of the task it's supervising.
+
 ## Traps
 
 - **Feeding a hardware watchdog from a task that doesn't actually confirm

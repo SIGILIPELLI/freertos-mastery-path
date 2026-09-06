@@ -83,6 +83,31 @@ with each other (a protocol version mismatch between the two independently
 updatable firmwares) becomes a real, additional failure mode dual-bank OTA
 alone doesn't address.
 
+## How It Actually Works
+
+The mailbox-interrupt path is worth tracing at the TCB level because it's
+where AMP's "no shared kernel" boundary meets the ordinary preemptive-
+scheduling machinery each core still runs on its own. The receiving core's
+mailbox ISR runs exactly like any other ISR on that core: it doesn't touch
+the other core's scheduler at all — it can only affect Ready/Blocked-list
+state *on its own core*, typically via `xQueueSendFromISR` or
+`xTaskNotifyFromISR` against a task whose TCB is already sitting on that
+queue's blocked list. If that give makes a higher-priority task Ready than
+the one currently running, the ISR requests a context switch on exit
+(`portYIELD_FROM_ISR`), exactly as it would for a UART or timer interrupt —
+the "message" is just the payload that gets copied into the queue; the
+scheduling decision afterward uses the same priority-comparison logic as
+every other event in this course.
+
+This local-only reach is also exactly why boot ordering matters so much:
+each core's Ready lists, delayed-task list, and idle task are initialized
+independently when that core's `vTaskStartScheduler()` runs. There is no
+global "system tick" shared between AMP cores' schedulers, so a message
+sent before the receiving core's scheduler and mailbox ISR are both live
+has nowhere to land — the remoteproc load→start sequence exists precisely
+to guarantee the receiving core's own kernel data structures are up before
+the primary core assumes it can signal it.
+
 ## Traps
 
 - **Assuming AMP gets automatic load balancing or work migration the way

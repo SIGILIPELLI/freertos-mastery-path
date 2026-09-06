@@ -113,6 +113,26 @@ mode your platform offers.
   Keep a build variant with tickless idle disabled for active debugging
   sessions.
 
+## How It Actually Works
+
+Normal FreeRTOS scheduling depends on a hardware timer interrupting *every
+single tick period* — 1ms on ESP32 Arduino — purely to let the kernel check
+"has anything's delay expired yet?" Tickless idle recognizes that this check
+is wasted work when the idle task is the only thing Ready: instead of
+letting the tick fire uselessly, `vPortSuppressTicksAndSleep` looks ahead in
+the Delayed task list (which is already kept sorted by wake time) to find
+the *soonest* wake-up, reprograms the timer hardware to fire exactly once at
+that point instead of every 1ms, and then puts the core into a low-power
+mode. When that single deferred interrupt fires, the kernel doesn't just
+wake one task — it computes how many tick periods were "missed" while
+sleeping and calls `vTaskStepTick()` to fast-forward the tick count
+atomically, so every timer and delay in the system stays correctly
+accounted for as if every individual tick had actually occurred. The
+interrupt-latency tradeoff exists because waking from a deep sleep state
+takes real microseconds-to-milliseconds for clocks/PLLs to stabilize — time
+during which even a high-priority ISR cannot be serviced, which is why
+tickless idle is disabled or bounded near any hard real-time deadline.
+
 ## Cheat sheet
 
 | Config / API | Purpose |

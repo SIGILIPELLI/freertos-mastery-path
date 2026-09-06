@@ -231,6 +231,26 @@ it's telling the scheduler "wake me in 250 ms; give the CPU to someone else."
 | `xTaskGetTickCount()` | Current tick count (like `millis()` in ticks) |
 | Task states | Running · Ready · Blocked (waiting, zero CPU) · Suspended |
 
+## How It Actually Works
+
+`xTaskCreate` does three concrete things: it `pvPortMalloc`s a stack buffer of
+the size you requested (in words, tracked in bytes internally) plus a TCB
+struct, it pre-fills the stack with a *guard pattern* (so
+`uxTaskGetStackHighWaterMark` can later measure how deep it was actually
+used), and it writes a synthetic **initial stack frame** — register values as
+if the task had just been interrupted — with the program counter pointing at
+your task function and the link register pointing at a trap that catches a
+task falling off the end of `for(;;)`. The task is then inserted into the
+Ready list for its priority; nothing runs yet until the scheduler is invoked.
+The four states (Running/Ready/Blocked/Suspended) are literally which linked
+list a TCB's `xStateListItem` sits on — `vTaskDelay` doesn't "wait," it moves
+the TCB from Ready onto the **Delayed task list**, sorted by wake tick, and
+removes it from Ready so the scheduler never considers it until the tick
+handler notices its time has come and moves it back. `vTaskDelayUntil`
+differs by computing the next wake time from a *stored* last-wake value
+rather than "now," which is why it doesn't accumulate drift the way chained
+`vTaskDelay` calls do when the task itself takes variable time to run.
+
 ## Exercise
 
 Build a three-task sketch in Wokwi:

@@ -148,6 +148,28 @@ something is weird, suspect sharing first.
 | Golden rule | Create kernel objects at startup; don't create/delete at runtime |
 | Crash suspects, in order | Stack overflow → ISR API misuse → NULL handles → starvation → heap → sharing bugs |
 
+## How It Actually Works
+
+Each task's stack is a plain array carved out of heap (or a static array with
+`xTaskCreateStatic`) that the CPU's stack pointer register is redirected into
+during that task's slice of run time — the kernel does this redirection as
+part of every context switch, saving the outgoing task's stack pointer into
+its TCB and loading the incoming task's. Stack overflow detection
+(`configCHECK_FOR_STACK_OVERFLOW` 1 or 2) works by inspecting how far the
+pointer has crept past the buffer's end at the moment of a context switch —
+method 1 checks if the pointer itself is out of bounds, method 2 additionally
+checks whether a canary byte pattern written at stack creation has been
+overwritten, catching overflows that method 1's simple bounds check misses.
+`uxTaskGetStackHighWaterMark` walks from the *far* end of the stack buffer
+counting how many untouched guard bytes remain — the smallest count ever
+observed since creation, not the current usage, which is why it's the right
+number for sizing decisions. The heap_1..5 allocators differ in exactly what
+data structure backs `pvPortMalloc`: heap_1 has no `free()` at all (a simple
+bump pointer — appropriate when tasks are never deleted), heap_4 maintains a
+coalescing free list to fight fragmentation, and heap_5 extends heap_4 across
+multiple disjoint memory regions (useful when internal and external/PSRAM
+memory both need to feed the same allocator).
+
 ## Exercise
 
 1. Write a task that calls a recursive function (e.g. naive `fib(n)`), and

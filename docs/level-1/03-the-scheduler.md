@@ -131,6 +131,57 @@ of the next two modules non-optional, not just polite. Everything else in
 this level works identically with or without pinning; Level 2's ESP-IDF
 module digs into the dual-core details.
 
+## How It Actually Works
+
+Under the hood, every task is a **Task Control Block (TCB)** — a C struct
+holding the task's name, priority, current state, stack pointer, and a
+`pxTopOfStack` value that points into that task's own private stack region.
+When the scheduler decides task A must stop and task B must run, it does not
+"transfer control" in any abstract sense — it performs a **context switch**:
+the current CPU registers (program counter, general-purpose registers, stack
+pointer) are pushed onto A's stack, A's TCB is updated to record where its
+stack pointer now sits, then B's TCB is read back to restore B's saved
+registers from B's stack, and execution resumes at exactly the instruction B
+was at when it was last preempted. This is why each task needs its own
+stack — the switch is really just "save state to this stack, load state from
+that stack."
+
+The tick interrupt is what makes this happen without cooperation. On every
+tick, the interrupt handler decrements the delay counters of any Blocked
+tasks; when a counter reaches zero, that task's TCB moves from a **delayed
+list** to the **Ready list** for its priority. The handler then asks the
+scheduler to re-evaluate: is the highest-priority Ready task the one
+currently running? If not, it sets a flag requesting a context switch, which
+happens either immediately (on return from the ISR) or, on the ESP32's dual
+FreeRTOS ports, via a similar mechanism per core. FreeRTOS keeps a small
+array of Ready lists indexed by priority (`pxReadyTasksLists[priority]`), so
+finding "the highest-priority Ready task" is just scanning from the top of
+that array down to the first non-empty list — O(1) in practice via a
+bitmap of occupied priorities on most ports.
+
+Queues and semaphores extend this same TCB machinery with a **blocked-on
+this object** list. When a task calls `xQueueReceive()` on an empty queue,
+its TCB is removed from the Ready list and appended to that queue's own
+list of waiting tasks (ordered by priority), and the scheduler immediately
+runs something else — the blocked task consumes zero CPU while it waits.
+When another task or ISR calls `xQueueSend()`, the kernel checks that
+waiting list: if a task is there, its TCB is moved straight back to Ready
+(and, if it outranks the currently running task, a context switch is
+requested on the spot) — the data reaches it without ever passing through
+the general Ready-list scan.
+
+This blocked-list design is also the root of **priority inversion** and its
+fix. If a low-priority task holds a mutex a high-priority task needs, the
+high-priority task's TCB sits on that mutex's blocked list — invisible to
+the scheduler as "urgent" until the mutex is released. FreeRTOS's mutex
+implementation (unlike a plain binary semaphore) checks this case: when a
+higher-priority task blocks on a mutex, the kernel temporarily raises the
+*holder's* priority to match, via **priority inheritance**, so the holder
+gets scheduled, finishes, and releases the mutex sooner — after which its
+priority drops back to normal. This is purely bookkeeping in the TCB's
+priority field plus a re-sort of Ready-list membership; no separate
+"inheritance task" exists.
+
 ## Cheat sheet
 
 | Concept / API | Meaning |

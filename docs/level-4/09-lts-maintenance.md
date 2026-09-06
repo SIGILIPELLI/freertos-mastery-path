@@ -89,6 +89,32 @@ layer discipline (Level 4 Module 3) that cleanly separates application code
 from a specific silicon's peripherals materially reduces the cost of a
 forced hardware revision partway through a product's field life.
 
+## How It Actually Works
+
+"Just update to the latest version" is risky precisely because kernel point
+releases can quietly change the internal data structures a shipped product
+implicitly depends on. LTS branch patches are scoped to fix a specific
+defect — say, a race in how a queue's blocked-task list is unlinked when a
+timeout and a send race on the same tick — without touching the surrounding
+TCB layout, Ready-list indexing, or the priority-inheritance bookkeeping
+paths your certification evidence or timing analysis already characterized.
+A non-LTS "latest" upgrade carries no such scoping guarantee: a scheduler
+algorithm tweak, a change to how the idle task's tickless-mode calculation
+works, or a reordering of how a task's TCB is initialized can each shift
+worst-case timing or interact differently with your application's own
+assumptions about blocking-list ordering — none of which shows up as a
+documented behavior change unless you re-read the kernel source diff
+yourself.
+
+This is also why an accurate SBOM has to record the *exact* kernel version,
+not just "FreeRTOS." Two devices nominally running "FreeRTOS" but on
+different LTS branches can have measurably different tick-interrupt
+overhead, different priority-inheritance edge-case behavior, or a patched
+versus unpatched blocked-list race — meaning a security advisory or field
+bug report is only actionable against a fleet whose version records are
+precise enough to say definitively which kernel internals a given device is
+actually running.
+
 ## Traps
 
 - **Treating LTS patch adoption as optional "if it ain't broke."**

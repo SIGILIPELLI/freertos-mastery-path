@@ -167,6 +167,25 @@ Everything works identically on a real ESP32 board via the Arduino IDE.
 | FreeRTOS | MIT-licensed, ~10 kB kernel; the world's most deployed RTOS; built into the ESP32 Arduino core |
 | When to skip an RTOS | Simple timing, tiny RAM, pure ISR designs, or no team experience + no time |
 
+## How It Actually Works
+
+A "superloop" and an RTOS run on the *same* Cortex/Xtensa core with the same
+interrupt hardware — the difference is entirely in software. FreeRTOS's
+scheduler is just a C function, `vTaskSwitchContext()`, invoked from two
+places: the **SysTick/tick-timer ISR** (or on ESP32, a hardware timer driving
+`xPortSysTickHandler`) and `portYIELD()`. Every task gets a **Task Control
+Block (TCB)** — a plain struct holding its saved stack pointer, priority,
+state, and the list nodes that place it on one of the kernel's *state lists*
+(Ready list per priority, a Delayed list, blocked lists for queues/semaphores).
+There is no free lunch: an RTOS spends real CPU cycles on every tick interrupt
+(walking the delayed-task list, checking timeouts) and on every context
+switch (saving ~16-32 registers to one task's stack, loading another's) —
+typically low single-digit microseconds on a 240 MHz Xtensa core. That
+overhead is the literal cost of the promise "the highest-priority ready work
+always runs within a bounded, tiny latency," which a superloop cannot make
+because one `delay(5000)` blocks *everything*, including a button ISR's
+handler if it was written to poll a flag the loop never reaches in time.
+
 ## Exercise
 
 1. Take the entangled blink-plus-print sketch from the top of this page and

@@ -116,6 +116,27 @@ rewiring on list items that were embedded in the TCB from the start. This is
 why FreeRTOS task/queue operations have bounded, predictable execution
 time: no dynamic list-node allocation ever happens on the hot path.
 
+## How It Actually Works
+
+Every list in the kernel — Ready lists, the Delayed list, a queue's waiting
+lists — is the *same* generic doubly-linked `List_t`/`ListItem_t` structure,
+which is why one mental model (insert, remove, find-minimum) explains the
+entire scheduler's data layer. The trick that makes this fast is the
+`xItemValue` field on each `ListItem_t`: for the Delayed list it holds the
+absolute wake tick, and `vListInsert` walks the list to insert in
+ascending order, so the *head* of the Delayed list is always the next thing
+due to wake — the tick ISR only ever has to check that one head entry
+against the current tick, never scan the whole list. For a Ready list,
+`xItemValue` isn't used for ordering (all entries share one priority);
+instead the entire array `pxReadyTasksLists[configMAX_PRIORITIES]` acts as
+the ordering, and `uxTopReadyPriority`/a leading-zero-count trick locates the
+highest non-empty index directly, in effectively constant time regardless of
+how many priorities exist below it. Each TCB carries **two** list items
+(`xStateListItem`, `xEventListItem`) precisely so a single task can be linked
+into a state list (Ready/Delayed/Suspended) and an event list (a specific
+queue's waiting list) *simultaneously* — moving a task between states is
+just relinking pointers, never copying the TCB itself.
+
 ## Traps
 
 - **Assuming ready lists are scanned linearly for the highest priority.**

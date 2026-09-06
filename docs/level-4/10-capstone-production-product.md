@@ -98,6 +98,32 @@ patch pipeline.
    even if the decision is "not required for this product," with the
    reasoning documented, not just the conclusion.
 
+## How It Actually Works
+
+The capstone's sensor-handler → control-logic → logging-gatekeeper chain is
+a good place to see every mechanism from this course composed in one
+running system. Each stage is its own task with its own TCB and private
+stack; the sensor handler blocks in `xQueueReceive` until an ISR's
+`...FromISR` give moves it from that queue's blocked list back to Ready.
+The tick interrupt drives the whole chain's timing: it expires the control
+task's periodic delay, decides via the Ready-list priority comparison
+whether that preemption should happen immediately or wait, and — if a
+mutex-guarded resource is shared with a lower-priority logging task —
+temporarily boosts that logger's priority through inheritance exactly long
+enough to hand data off without an unbounded stall. None of these are
+separate features bolted together; they're one set of TCB and blocked-list
+operations, reused at every layer of the architecture.
+
+This is also why the RMA calculation and the fault-domain table have to
+agree with each other rather than being produced independently: the
+blocking-time term in the schedulability test is only valid if the fault-
+domain design hasn't quietly introduced an extra shared resource (a queue
+or mutex two more tasks now touch) that changes which TCBs can end up on
+which blocked lists, and in what order, under a real fault. A capstone
+design where the timing analysis and the recovery-policy table were
+written against two different mental models of the task graph will not
+hold up the moment both are exercised on real hardware together.
+
 ## Traps carried through the whole course
 
 - **Skipping the measurement step and trusting the design "looks right."**

@@ -148,6 +148,27 @@ liveness updates.
   rebooting forever) can mask a hardware or firmware defect for a long
   time in the field.
 
+## How It Actually Works
+
+A hardware watchdog is an independent timer peripheral, running off its own
+clock source outside the CPU's normal execution path, that resets the whole
+chip if a "feed" register isn't written before it expires — it knows nothing
+about tasks, priorities, or the scheduler; it only knows whether *someone*
+called the feed function recently. Software supervision layers task-level
+meaning onto that blunt tool: a supervisor task (often the one that feeds the
+hardware watchdog) periodically checks a per-task **liveness token** —
+typically a timestamp or incrementing counter each monitored task updates
+via a task notification or a shared variable after finishing a work cycle.
+The supervisor only feeds the real hardware watchdog if *every* monitored
+task's token has advanced within its expected window, converting "the whole
+system hasn't hung" (all the hardware watchdog can express) into "task X
+specifically stopped responding" (which you can log before the hardware
+watchdog's blunt full-chip reset fires as the last resort). This is also why
+watchdog design must never let the *feeding itself* mask a real hang — the
+common bug is a low-priority feeder task that still runs fine while a
+higher-priority task deadlocks, hiding the very fault the watchdog exists to
+catch.
+
 ## Cheat sheet
 
 | Concept | Purpose |

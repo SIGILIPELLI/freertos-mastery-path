@@ -109,6 +109,26 @@ tracer does — for those, Tracealyzer or SystemView (or reading a logic
 analyzer trace directly) is the right tool, and no amount of counter-based
 cleverness substitutes for one when you actually need it.
 
+## How It Actually Works (where the trace events actually come from)
+
+`configUSE_TRACE_FACILITY` doesn't add a background sampler — it inserts
+macro calls (`traceTASK_SWITCHED_IN`, `traceQUEUE_SEND`, etc.) directly at
+the exact points in the kernel's own source where those events already
+happen: `vTaskSwitchContext` calls `traceTASK_SWITCHED_IN` the instant it
+updates `pxCurrentTCB`, and `xQueueGenericSend` calls `traceQUEUE_SEND` right
+after the copy into the ring buffer succeeds. By default these macros expand
+to nothing, so a non-tracing build pays zero cost; Tracealyzer and SystemView
+each redefine them to append a compact record (event id, timestamp from a
+high-resolution timer, sometimes a task handle) into a small in-RAM ring
+buffer, which is why enabling tracing shifts overhead from "instrumentation
+computing something" to "a few extra memory writes per already-occurring
+kernel event" — it observes the real scheduling stream rather than sampling
+or guessing at it. This is also why print-statement debugging fails here:
+`Serial.println` inside a task is itself scheduled, blocking, and slow
+enough (milliseconds) to change the very interleaving you're trying to
+observe, while the trace macros run in the same handful of cycles the event
+itself already took.
+
 ## Traps
 
 - **Enabling `configUSE_TRACE_FACILITY` and never actually attaching a

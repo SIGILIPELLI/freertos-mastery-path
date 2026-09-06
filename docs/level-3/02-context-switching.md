@@ -164,6 +164,25 @@ constant regardless of task count) — the *shape* of the result (switching
 has a small, roughly fixed per-switch cost you can budget for) transfers;
 the absolute number does not.
 
+## How It Actually Works (beyond the register save)
+
+`PendSV` is deliberately the *lowest*-priority exception on ARM Cortex-M
+specifically so a context switch never preempts a higher-priority hardware
+interrupt that's still being serviced — if the tick ISR requests a switch
+while a UART ISR is mid-flight, PendSV is left pending and only fires once
+every higher-priority exception has finished, which keeps interrupt latency
+bounded independent of scheduling activity. `vTaskSwitchContext` runs
+*before* the register save/restore, as plain C, and its only job is to pick
+which TCB's stack pointer `pxCurrentTCB` should point to next — the actual
+save/restore that follows is architecture-specific assembly that doesn't
+know or care about priorities at all, it just pushes registers onto whatever
+stack the outgoing task was using and pops registers from the incoming
+task's stack. This split (policy in C, mechanism in asm) is exactly what
+lets the same scheduler logic run on Cortex-M0, Cortex-M4F (which must also
+lazily save FPU registers, deferred until a task actually touches
+floating-point, to avoid paying that cost on every switch), Xtensa, and the
+POSIX simulator, with only the small port layer rewritten per architecture.
+
 ## Traps
 
 - **Assuming task switch time scales with the number of tasks.** It doesn't

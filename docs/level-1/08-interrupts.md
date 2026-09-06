@@ -177,6 +177,26 @@ measure ISR length in microseconds, not milliseconds.
 | Best ISR→task signal | Task notification (fastest); queue when the event carries data |
 | Attach order | Create the handler task *before* `attachInterrupt` |
 
+## How It Actually Works
+
+An ISR on FreeRTOS runs *outside* the task scheduling world entirely — it
+executes on whatever stack/mode the CPU uses for interrupts, not a task
+stack, and it never itself gets "scheduled" or preempted by a task. Every
+FreeRTOS API usable from an ISR has an `...FromISR` twin because the normal
+versions may attempt to block (illegal — an ISR cannot be suspended waiting
+for something) and because the ISR variant takes a
+`BaseType_t *pxHigherPriorityTaskWoken` out-parameter: when
+`xQueueSendFromISR` (or `vTaskNotifyGiveFromISR`) wakes a task, it cannot
+switch to it immediately — the CPU is still inside interrupt context — so it
+just sets that flag to `pdTRUE` and returns. The deferred-work pattern's
+`portYIELD_FROM_ISR(xHigherPriorityTaskWoken)` at the end of the ISR is what
+actually requests the context switch, by setting the same pending-switch bit
+that a preemption from the tick handler would set, so the switch happens the
+instant the CPU finishes the ISR epilogue and returns from interrupt mode —
+typically only a few microseconds after the hardware event, which is why a
+task woken from an ISR can feel indistinguishable from running inside the
+ISR itself while still keeping ISR bodies microsecond-short.
+
 ## Exercise
 
 1. Build the button demo, then press the button rapidly: confirm the

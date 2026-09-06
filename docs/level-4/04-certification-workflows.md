@@ -92,6 +92,32 @@ argument — this is a real, non-trivial technical judgment call requiring a
 qualified safety assessor's involvement, not something a generic course
 module can settle in the abstract for a specific product.
 
+## How It Actually Works
+
+Mixed-criticality independence arguments live or die on what the MPU
+actually isolates at the kernel level. FreeRTOS-MPU gives each task its own
+memory protection region defined in its TCB (the region table travels with
+the task, not globally), and on every context switch the kernel reprograms
+the MPU's regions to match the *incoming* task's TCB before that task's
+first instruction executes — an ASIL D task's private RAM and peripheral
+mappings are simply unreachable while a QM task's TCB is the one loaded.
+This is the concrete mechanism an ASIL decomposition argument has to point
+to: independence isn't a documentation claim, it's "the scheduler's own
+context-switch routine reloads a different, non-overlapping MPU region set
+for each task," which is auditable in the kernel port's source.
+
+Where this gets subtle is shared kernel state that both ASIL and QM tasks
+touch indirectly — a queue or mutex that a QM task can send to and a higher-
+ASIL task blocks on. The blocked-task list inside that queue's control
+structure is kernel memory, not task memory, so it sits outside per-task
+MPU regions by design; a corrupted QM task that scribbles on its own stack
+cannot reach it, but a shared object accessed by both criticality levels
+means a common-cause failure argument has to explicitly address that the
+queue's internal linked list, not just the task stacks, is a shared
+resource. This is exactly the "sufficiently independent architectural
+elements" evidence ISO 26262 decomposition demands — traced down to which
+kernel objects two tasks actually share.
+
 ## Traps
 
 - **Treating certification as a testing phase bolted on at the end.**

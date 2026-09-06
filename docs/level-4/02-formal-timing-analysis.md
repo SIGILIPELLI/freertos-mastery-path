@@ -114,6 +114,33 @@ Level 3 Module 7 already covered as correctness mechanisms). A WCET number
 computed in isolation from the RTOS's own scheduling overhead
 systematically understates real worst-case response time.
 
+## How It Actually Works
+
+To see why the blocking-time term in RMA is not optional bookkeeping,
+trace what actually happens at the TCB level during a priority-inversion
+scenario. A low-priority task holds a mutex; a medium-priority task is
+independently Ready and runs on the CPU (it never touches the mutex); a
+high-priority task blocks on the mutex, so its TCB moves off the Ready list
+and onto the mutex's own blocked-task list. Without priority inheritance,
+the scheduler has no idea the medium task is delaying something urgent — it
+just sees "highest-priority Ready task" and picks the medium task,
+potentially for an *unbounded* time. Priority inheritance closes this by
+temporarily rewriting the low-priority holder's TCB priority field to match
+the blocked high-priority task the moment it blocks, forcing the scheduler
+to pick the holder over the medium task and bounding the inversion to the
+holder's own critical-section length — which is precisely the number that
+has to appear as a blocking term in the RMA schedulability test.
+
+The tick interrupt and context-switch cost matter for the same reason: they
+are not "background kernel work" separate from a task's WCET, they are
+scheduling events that can land in the middle of a task's execution window.
+Every tick recalculates which TCB should be running; if that recalculation
+preempts the task being analyzed (a higher-priority task's delay just
+expired), the analyzed task's wall-clock completion time includes that
+context switch's save/restore cost even though the task's own instructions
+never changed. A WCET bound that ignores this is measuring the code, not
+the system the code actually runs inside.
+
 ## Traps
 
 - **Using a measured maximum as WCET without justification.** As covered

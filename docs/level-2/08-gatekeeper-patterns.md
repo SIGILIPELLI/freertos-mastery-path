@@ -152,6 +152,25 @@ than to serialize a slow I/O operation.
   several producers at once — size it for the real worst case, not the
   steady-state average.
 
+## How It Actually Works
+
+A gatekeeper task works because of the same queue-blocking mechanism from
+module 4, aimed at a specific structural goal: mutual exclusion **without a
+mutex at all**. Multiple producer tasks call `xQueueSend` on the gatekeeper's
+inbox queue — a plain memcpy into the ring buffer, safe for any number of
+concurrent senders because the queue's internal critical section already
+serializes concurrent sends. The gatekeeper task itself is the *only* code
+that ever touches the protected resource (a UART, a radio, a shared log),
+so there is no possibility of two tasks accessing it simultaneously and
+therefore no need for the priority-inheritance machinery a mutex provides —
+there's no "holder" to invert priority against, because the resource is
+never contended for directly at all. This beats a mutex specifically when
+the protected operation is slow (a radio transmit) and callers shouldn't
+block waiting for it: `xQueueSend` returns as soon as the message is queued,
+while the actual transmission happens later, serialized, on the gatekeeper's
+own schedule — a mutex, by contrast, would make every caller block for the
+full duration of somebody else's transmit.
+
 ## Cheat sheet
 
 | Pattern | Use when | Cost |

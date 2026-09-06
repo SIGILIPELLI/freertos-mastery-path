@@ -120,6 +120,24 @@ own the dispatch logic with no shared mutable state at all.
   member from an ISR uses the ordinary `...FromISR` send/give calls on the
   member itself.
 
+## How It Actually Works
+
+A queue set doesn't merge the data paths of its member queues/semaphores at
+all — under the hood, every member still has its own independent buffer and
+list of waiting tasks exactly as before. What a queue set actually is is one
+more queue, holding not your data but **handles** to whichever member just
+became non-empty: when you `xQueueSend` to a queue that has been added to a
+set, the send operation, immediately after placing your item, also pushes
+that queue's own handle onto the set's internal queue and wakes the task
+blocked in `xQueueSelectFromSet`. That task then reads the returned handle
+and calls a plain `xQueueReceive` on it to actually pull the data — two
+queue operations happen per item instead of one, which is the real cost of
+being able to block on N queues from a single task. The single-consumer
+rule exists because if two tasks were both waiting in
+`xQueueSelectFromSet`, whichever wakes first could drain the underlying
+member queue before the second task's subsequent `xQueueReceive` finds
+anything there, turning "selected" into a race rather than a guarantee.
+
 ## Cheat sheet
 
 | API | Purpose |

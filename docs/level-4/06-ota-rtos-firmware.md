@@ -89,6 +89,31 @@ through a flash-driver interface owned by exactly one task (Level 2 Module
 multiple tasks during an update is a serious corruption risk), with
 progress and errors reported through the logging gatekeeper.
 
+## How It Actually Works
+
+Giving the OTA task a deliberately low priority is not just etiquette — it's
+using the scheduler's own preemption rule as the safety mechanism. Because
+the highest-priority Ready task always runs, a low-priority OTA task
+writing flash gets preempted mid-write the instant a higher-priority
+control-loop or sensor task's delay expires or its queue receives data; the
+OTA task simply resumes from wherever the tick interrupt swapped it out,
+because its own context (stack pointer, registers) was saved into its TCB
+exactly like any other task. The flash write itself doesn't get corrupted
+by this preemption as long as it's structured as discrete, queue-fed chunk
+writes rather than one long uninterruptible operation — each chunk write
+either completes as a unit before the task blocks again on its input queue,
+or it doesn't start until the previous one has.
+
+The single-writer gatekeeper pattern matters here for a very literal
+reason: flash write/erase operations are not atomic with respect to a
+context switch the way a RAM write is. If two tasks' TCBs could both be
+Ready and both hand write commands to the flash driver, a preemption
+between "erase sector" and "write sector" from one task interleaved with
+another task's write to the same sector is exactly the kind of race the
+gatekeeper's single dedicated task — reached only through a queue whose
+blocked-list membership never includes more than the one consumer — is
+designed to make structurally impossible rather than merely unlikely.
+
 ## Traps
 
 - **Overwriting the currently-running firmware image in place**, rather

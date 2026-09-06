@@ -143,6 +143,27 @@ you must wire up watchdog integration yourself.
   from mainline conventions; always check `CONFIG_FREERTOS_*` defaults in
   `sdkconfig` rather than assuming Level 1's numbers port over unchanged.
 
+## How It Actually Works
+
+ESP-IDF's FreeRTOS (based on Amazon SMP FreeRTOS) runs **two schedulers**
+that share a single set of Ready-list data structures protected by a
+cross-core spinlock — when core 0's scheduler wants to pick a new task, it
+briefly holds that lock so core 1 can't mutate the same list simultaneously,
+which is the real reason `portENTER_CRITICAL` on ESP32 takes a spinlock
+argument instead of just disabling interrupts the way single-core FreeRTOS
+does. An **unpinned** task (`tskNO_AFFINITY`) is eligible to run on whichever
+core is free at the next scheduling decision on either core, which sounds
+efficient but means the task's cache-resident state gets cold every time it
+migrates; a **pinned** task only ever appears in that core's scheduling
+decisions. `IRAM_ATTR` forces a function's code into internal RAM instead of
+flash mapped through the cache — this matters for ISRs specifically because
+servicing a cache miss while flash operations (like `spi_flash_erase`) have
+disabled cache access would hang the core, so any ISR that might fire during
+a flash write must live entirely in IRAM. The default watchdogs
+(Task WDT watching idle-task starvation per core, Interrupt WDT watching for
+excessively long critical sections) are themselves just kernel-level
+timers layered on this same dual-scheduler foundation.
+
 ## Cheat sheet
 
 | Concept | Vanilla FreeRTOS | ESP-IDF FreeRTOS |

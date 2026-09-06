@@ -130,6 +130,24 @@ cross-core synchronization and memory barriers for you, and treating raw
 shared globals between core-pinned tasks as something to avoid rather than
 something to patch with `volatile`.
 
+## How It Actually Works (why spinlocks, not just critical sections)
+
+On a single core, `taskENTER_CRITICAL()` only has to disable interrupts on
+that one CPU — nothing else can run, full stop. On SMP that's not enough:
+disabling interrupts on core 0 does nothing to stop core 1 from concurrently
+mutating the same Ready list, so the SMP port layers a **spinlock** on top —
+`portENTER_CRITICAL` disables local interrupts *and* atomically test-and-sets
+a shared lock word, busy-waiting if the other core already holds it. This is
+why SMP critical sections must be kept even shorter than single-core ones:
+time spent spinning on core 1 is CPU cycles genuinely wasted, not just
+"unavailable to lower-priority tasks" as on a single core. Cache coherency
+becomes a real trap specifically because each core has its own L1 cache —
+a flag variable one task sets on core 0 might sit only in core 0's cache
+line and never become visible to a polling loop on core 1 without a memory
+barrier or the hardware's coherency protocol synchronizing the write, a
+class of bug that simply cannot exist on a single-core build no matter how
+that code is written.
+
 ## Traps
 
 - **Assuming `configRUN_MULTIPLE_PRIORITIES=0` restores full single-core

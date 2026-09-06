@@ -87,6 +87,27 @@ for the opposite:
    narrows the search** — counters are for "where should I look," a tracer
    is for "what exactly is happening in that window."
 
+## How It Actually Works (what the config knobs actually cost)
+
+`configUSE_16_BIT_TICKS` doesn't just save 2 bytes per timestamp — because
+tick counts are compared throughout the delayed-list and timer logic, a
+16-bit tick counter overflows (wraps to 0) after roughly 65 seconds at 1kHz,
+and the kernel's wraparound-safe comparison math for a 16-bit counter is
+subtly different and more restrictive about how far in the future a delay
+can validly be requested than the 32-bit path — a real correctness ceiling,
+not just a size/speed tradeoff. `configUSE_PORT_OPTIMISED_TASK_SELECTION`
+swaps a linear scan of `pxReadyTasksLists[]` for a hardware count-leading-
+zeros instruction against a priority bitmap, which only pays off once
+`configMAX_PRIORITIES` is large enough that scanning actually shows up in a
+profile — measuring before touching this config is the correct instinct
+because on most single-digit-priority-count firmware the scan is already
+a handful of cycles. The general lesson under all of these: FreeRTOS's own
+overhead (tick handling, context switches) is typically dwarfed by
+application-level costs — an oversized critical section, a busy-poll instead
+of a block, a task priority scheme that causes needless preemption churn —
+which is why the profiling checklist puts application code ahead of kernel
+config knobs.
+
 ## Traps
 
 - **Optimizing switch overhead before confirming it's actually the

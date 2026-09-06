@@ -104,6 +104,25 @@ Cortex-M-specific incidental detail.
    the switch-in-from-a-real-context path, isolating the two most common
    classes of bugs from each other.
 
+## How It Actually Works (the synthetic frame in detail)
+
+`pxPortInitialiseStack` is the one function that has to understand the exact
+layout of registers your CPU's context-switch assembly expects to find on a
+stack, because it has to *fabricate* that exact layout for a task that has
+never actually run yet — it writes what looks like a completed interrupt
+frame (program counter set to the task function, xPSR with the Thumb bit set
+correctly on ARM, a bogus-but-valid link register that traps a task falling
+off its `for(;;)`) so that the very first `vTaskSwitchContext` for this task
+can restore it with the identical code path used for every subsequent
+switch, with no special-cased "first run" branch anywhere in the scheduler.
+The other two files a port supplies — the tick-timer setup and the
+PendSV-equivalent switch trigger — are comparatively mechanical by
+comparison, which is why the porting checklist front-loads verifying the
+initial stack frame against a debugger's register view before trusting
+anything else: get that frame's layout wrong by even one word and the very
+first context switch corrupts a register silently rather than crashing
+immediately.
+
 ## Traps
 
 - **Getting register order right for the first task but wrong for the

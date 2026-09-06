@@ -155,6 +155,26 @@ them through a queue into a single relay task that owns the stream buffer.
   (each message also costs a small internal length header) — it is not
   "room for 512 messages."
 
+## How It Actually Works
+
+Stream and message buffers are built on a shared internal structure (a
+`StreamBuffer_t`) that is deliberately **not** the queue's fixed-slot ring
+buffer — it's a single byte-addressed circular buffer with a read index and a
+write index, which is what lets it hold variable-length data efficiently
+instead of wasting a fixed slot size on every message. A message buffer is
+literally a stream buffer with one convention layered on top: before your
+bytes, `xMessageBufferSend` writes a small length header, so
+`xMessageBufferReceive` knows exactly how many bytes make up the next
+complete message and returns them atomically as one chunk. This is also
+why the single-reader/single-writer rule is load-bearing rather than a
+suggestion: unlike a queue, there is no per-item locking — the buffer relies
+on the fact that only one task ever advances the write index and only one
+ever advances the read index, so the two can proceed without a mutex (each
+only touches its own index; the "how much space is free" check is a simple
+subtraction safe under that single-writer/single-reader assumption). A
+second concurrent writer could interleave two messages' bytes with no way to
+detect the corruption, since there's no per-writer locking to prevent it.
+
 ## Cheat sheet
 
 | API / concept | Stream buffer | Message buffer |

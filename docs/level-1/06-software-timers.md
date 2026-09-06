@@ -148,6 +148,25 @@ timestamp and a reset dance; `xTimerReset` replaces all of it.
 | Callback rules | Never block; keep short; timeout-0 queue/semaphore to hand off work |
 | Precision | ~1 tick + scheduling delays — not for control loops |
 
+## How It Actually Works
+
+Software timers are **not** driven directly by the tick ISR — they're
+implemented on top of the exact same queue and task primitives you already
+know. FreeRTOS creates one dedicated task, the **Timer Service (Daemon)
+task**, at a priority you set via `configTIMER_TASK_PRIORITY`, and it owns a
+private input queue (`xTimerQueue`) plus a sorted linked list of active
+timers ordered by expiry tick. Calling `xTimerStart`/`xTimerChangePeriod`
+doesn't touch the timer list directly at all — it sends a **command message**
+(start/stop/reset/delete + the timer handle) onto `xTimerQueue`, which is why
+these calls are safe to make from an ISR (`...FromISR` variants) and why
+there's an implicit hop of latency between calling `xTimerStart` and the
+callback actually running. The tick ISR's only job regarding timers is
+comparing the current tick to the head of that sorted list; when a timer's
+time arrives, the tick handler unblocks the Timer Service task, which pops
+the expired timer(s) and calls your callback **synchronously, inline, on the
+Timer Service task's own stack** — meaning a callback that blocks stalls
+every other timer in the system behind it, since they all share this one task.
+
 ## Exercise
 
 Build a "smart night-light" in Wokwi (two LEDs + one button):

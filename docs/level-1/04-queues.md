@@ -177,6 +177,25 @@ void printerTask(void *pv) {
 | Timeout values | `0` = no wait · `pdMS_TO_TICKS(ms)` · `portMAX_DELAY` = forever |
 | Struct vs pointer | Small data: queue the struct (no ownership issues). Big data: queue a pointer + strict ownership transfer |
 
+## How It Actually Works
+
+A FreeRTOS queue is a fixed-size ring buffer allocated as one contiguous
+block (`item size * queue length` bytes) plus a small header tracking head,
+tail, and message-waiting count — `xQueueSend` is a `memcpy` of your struct
+into the next free slot, not a pointer handoff, which is exactly why passing
+structs by value is the safe default (the sender's local variable can go out
+of scope immediately after). The interesting mechanism is what happens when
+the queue is full or empty: instead of busy-waiting, the calling task's TCB
+is unlinked from the Ready list and linked onto the queue's own
+**xTasksWaitingToSend** or **xTasksWaitingToReceive** list, sorted by
+priority, and the scheduler picks a new task to run — the blocked task
+consumes zero CPU until woken. When `xQueueReceive` frees a slot, the kernel
+checks that send-waiting list and, if a higher-priority task was waiting,
+immediately unblocks it and **switches to it before returning** to whichever
+lower-priority task just made room — this is why a queue can hand data from a
+low-priority producer to a high-priority consumer with sub-millisecond
+latency instead of waiting for the next scheduler tick.
+
 ## Exercise
 
 Build a two-producer, one-consumer pipeline:

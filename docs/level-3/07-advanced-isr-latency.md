@@ -104,6 +104,28 @@ meaningless. `configUSE_MUTEXES` with real mutexes (not binary semaphores
 used *as* a mutex, which do not inherit priority) is a hard prerequisite for
 any latency-bounded design, not an optional correctness nicety.
 
+## How It Actually Works (the latency budget, term by term)
+
+Measured interrupt-to-task latency is the sum of several independently
+bounded pieces, and each has a distinct kernel-level cause. First, hardware
+vectoring and any higher-priority ISR already running (interrupt latency
+proper) — bounded by your interrupt priority scheme, not by FreeRTOS.
+Second, if `taskENTER_CRITICAL` is held anywhere in application code when the
+interrupt fires, the ISR itself may run immediately (critical sections
+disable maskable interrupts but not always all interrupt classes, port-
+dependent) but the *scheduler's reaction* to anything the ISR signals is
+deferred until the section ends — this is the mechanism-level reason
+critical sections must be kept as short as documented. Third, once the
+ISR sets `pxHigherPriorityTaskWoken` and calls `portYIELD_FROM_ISR`, the
+actual switch waits for the current interrupt (and any higher-priority one
+pending) to finish unwinding, since PendSV/the switch mechanism is
+intentionally the lowest-priority exception. Priority inversion adds a
+*fourth*, unbounded term to this chain: a mutex held by a low-priority task
+that a medium-priority task is oblivious to can make the "task resumes"
+half of ISR latency wait not microseconds but however long that low task
+takes to get preempted-in and release the mutex — which is exactly why it's
+classified as a latency bug, not merely a correctness one.
+
 ## Traps
 
 - **Calling any FreeRTOS API from an ISR configured above

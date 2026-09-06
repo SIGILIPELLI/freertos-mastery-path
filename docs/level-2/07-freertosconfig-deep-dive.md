@@ -136,6 +136,28 @@ flash whether or not application code exercises it.
   hooks table above is a linker error waiting to happen the first time
   someone enables the flag without reading what it requires.
 
+## How It Actually Works
+
+`FreeRTOSConfig.h` is not a runtime settings file — every one of these
+`#define`s is a compile-time constant the kernel's own C source is written
+against, so most of them change the *size and shape* of kernel structures
+rather than toggling a flag an `if` checks at runtime. `configMAX_PRIORITIES`
+directly sets the size of the Ready-list array (`pxReadyTasksLists[]`) — the
+scheduler picks the next task by finding the highest non-empty index in that
+fixed array via a bitmap trick (`configUSE_PORT_OPTIMISED_TASK_SELECTION`, a
+CLZ/count-leading-zeros instruction) or a linear scan, so this single number
+trades RAM and scan cost for how many distinct urgency levels you can
+express. `configTICK_RATE_HZ` sets the literal hardware timer reload value
+the port layer programs, which in turn sets the granularity of every
+`vTaskDelay` and the frequency of every tick-ISR scheduling check.
+`INCLUDE_*` knobs conditionally compile entire functions in or out via
+preprocessor guards — calling an API whose `INCLUDE_` flag is 0 is a link
+error, not a runtime failure, because the function body was never compiled.
+`configCHECK_FOR_STACK_OVERFLOW` and `configASSERT` insert extra instructions
+directly into the context-switch and API entry paths respectively — real,
+measurable cycles spent on every switch, which is the actual tradeoff behind
+"turn on more safety checks."
+
 ## Cheat sheet
 
 | Category | Key macros |

@@ -93,6 +93,28 @@ throughput, exactly the same mechanism as any other priority-starvation
 scenario covered earlier in this course, just manifesting as "the network is
 slow" instead of "a sensor reading is late."
 
+## How It Actually Works (the IP task as a single-threaded kernel-within-a-kernel)
+
+FreeRTOS+TCP resolves the classic "shared mutable network state accessed
+from many tasks" problem the same way the gatekeeper pattern does at
+application level: essentially all protocol state (sockets, the ARP cache,
+routing) is only ever touched by one task, the **IP task**, and every socket
+call from application tasks (`FreeRTOS_send`, `FreeRTOS_recv`) is translated
+into a message sent over an internal queue to that task rather than
+manipulating shared state directly from the caller's own context — this is
+why it "looks like more FreeRTOS" rather than a bolted-on library: it's
+built from the exact same queue-and-task primitives as your application
+code, just applied to protocol state instead of sensor data. Zero-copy
+buffers exist because a `memcpy` of every packet between the network driver
+and the IP task would be real, measurable overhead at typical Ethernet
+rates — instead a buffer descriptor (a pointer plus length) moves through
+the queue while the actual payload bytes stay put in DMA-accessible memory
+that both the driver and the IP task can reach. The TCP-timing connection is
+direct: retransmission timers and the window/congestion logic are themselves
+implemented as callbacks off the *same* tick-driven timing infrastructure
+covered in the software-timers module, which is why a starved or delayed IP
+task shows up as real, measurable jitter in your TCP round-trip times.
+
 ## Traps
 
 - **Setting the IP task's priority too low.** Because all socket operations

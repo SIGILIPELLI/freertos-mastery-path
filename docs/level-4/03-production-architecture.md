@@ -91,6 +91,32 @@ This decision needs to be made deliberately per subsystem during
 architecture, not discovered accidentally in the field — Level 4 Module 7's
 fault-tolerant design patterns build directly on this foundation.
 
+## How It Actually Works
+
+"Blast radius" is a precise, mechanical idea once you look at what a task
+crash actually corrupts. Each task owns its own stack and its own TCB; the
+kernel's shared state — the array of Ready lists indexed by priority, the
+delayed-task list the tick interrupt walks, and each queue/semaphore's
+blocked-task list — is common to every task. A crash that overwrites only
+its own stack (a bounded stack overflow an MPU guard region catches) can be
+contained: the kernel deletes that one TCB, frees its stack, and the Ready
+lists for every other priority are untouched, so `vTaskDelete` plus
+recreate really does restart just that subsystem. A crash that corrupts a
+shared queue's blocked-list pointers, or writes past its stack into kernel
+heap used by the scheduler's own bookkeeping, is a different class of
+event: the next context switch that reads that corrupted list can hand the
+CPU to a garbage stack pointer, which is why a stack overflow that has
+already breached its guard region is architected as a full-reset trigger
+rather than a contained one — by the time it's detected, you can no longer
+trust the Ready-list data the decision would be based on.
+
+This is also why the module boundary discipline earlier in this chapter
+(one gatekeeper task per shared resource) doubles as fault-domain design:
+a resource accessed only through its own task's queue, rather than through
+a mutex shared directly by many tasks, means a crash in one caller can
+never leave that mutex's internal blocked-list in an inconsistent state —
+the gatekeeper task is the only one whose TCB ever sits on it.
+
 ## Traps
 
 - **Letting application code call vendor SDK functions directly, scattered

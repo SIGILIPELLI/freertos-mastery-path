@@ -154,6 +154,25 @@ observed minimum.
   library, `malloc()` inside `printf` on some libc configurations) can
   still fragment the heap.
 
+## How It Actually Works
+
+`xTaskCreateStatic` and friends skip `pvPortMalloc` entirely by having *you*
+supply the memory (a `StaticTask_t` struct and a stack array) at compile
+time — the kernel then does exactly the same initialization it always does
+(writing the synthetic startup stack frame, linking the TCB into the Ready
+list) except it writes into memory the linker already placed, rather than
+memory carved from the heap at runtime. This has a scheduling-relevant
+consequence beyond avoiding fragmentation: heap allocators like heap_4 run
+inside a **critical section** (interrupts briefly disabled) while they walk
+the free list, so a dynamic `xTaskCreate` call has a small but real bounded
+delay and a rare worst case tied to free-list length; a static creation has
+none of that — its cost is just the struct writes, which is why safety-
+critical or hard-real-time systems often mandate `configSUPPORT_DYNAMIC_ALLOCATION
+== 0` so *no* code path can ever hit the heap allocator's critical section at
+an inconvenient moment. The stack sizing math doesn't change at all —
+`uxTaskGetStackHighWaterMark` measures the same guard-byte erosion whether
+the buffer came from `malloc` or a global array.
+
 ## Cheat sheet
 
 | Dynamic | Static | Notes |

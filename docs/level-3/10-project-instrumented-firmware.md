@@ -141,6 +141,26 @@ doesn't actually work when executed.
   project's counters are a coarse, always-available substitute, not a
   replacement, for a proper trace when hardware-level questions arise.
 
+## How It Actually Works
+
+This capstone's instrumentation layer works precisely because it hooks the
+same points a commercial tracer would: the trace macros this level's
+tracing module covered fire at task-switch and queue-event points inside
+the kernel's own source, so recording a "last N events" ring buffer here
+costs the same few extra memory writes per already-occurring event, not a
+new polling loop. Routing the stats reporter through the gatekeeper reuses
+the module 8 lesson directly — the reporter task never touches the
+output transport itself, it queues a formatted line to the single task that
+owns it, so contention for the transport is resolved by the same
+single-writer queue discipline, with no mutex or priority-inheritance
+machinery needed because nothing else ever reaches that resource directly.
+Where the "what was and wasn't verified" honesty matters most is that
+software instrumentation like this necessarily perturbs timing by the cost
+of the instrumentation itself (a few cycles per event here), which is
+negligible next to millisecond-scale task periods but would not be for
+microsecond-scale ISR latency work — exactly the boundary the latency
+module's benchmark ran into.
+
 ## Stretch goals
 
 1. Port the whole system from the POSIX simulator to real Cortex-M

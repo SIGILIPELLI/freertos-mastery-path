@@ -190,6 +190,27 @@ even cheaper tool (task notifications) for the simplest of those cases.
 | Deadlock defenses | Don't nest → fixed lock order → timeouts + backoff |
 | Queue vs semaphore | Event carries data? Queue. Pure signal / resource count? Semaphore. Shared state? Mutex. |
 
+## How It Actually Works
+
+A binary semaphore and a mutex share the same underlying queue-based data
+structure (a queue of length 1 with no data, just a count), but a **mutex**
+carries one extra field a plain semaphore doesn't: the **holder task
+handle**, which is what makes priority inheritance possible. When a
+high-priority task calls `xSemaphoreTake()` on a mutex already held by a
+low-priority task, the kernel doesn't just block — it walks the holder's TCB
+and *temporarily raises its priority* to match the blocked task's, then
+re-sorts it into the correct Ready-list priority slot. This stops **priority
+inversion**: without inheritance, a medium-priority task that never touches
+the mutex could keep preempting the low-priority holder indefinitely, and
+the high-priority task would starve waiting on a resource held by a task that
+never gets to run. The moment the low task calls `xSemaphoreGive()`, the
+kernel restores its original priority and immediately reschedules — because
+the give operation ends with the same "check if a waiter should preempt me"
+logic queues use. Plain binary/counting semaphores skip all of this
+bookkeeping (no holder concept applies to counting a pool of N resources),
+which is exactly why they must never be used to protect a shared mutable
+resource — only a mutex's holder tracking prevents inversion.
+
 ## Exercise
 
 1. Build the priority-inversion demo: `lowTask` (prio 1) takes a **binary
