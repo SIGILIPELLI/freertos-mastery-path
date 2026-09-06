@@ -1542,6 +1542,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-beyond-the-register-save" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (beyond the register save)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-beyond-the-register-save" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (beyond the register save)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2455,6 +2477,23 @@ popped registers plus fixed hardware exception entry/exit overhead, roughly
 constant regardless of task count) — the <em>shape</em> of the result (switching
 has a small, roughly fixed per-switch cost you can budget for) transfers;
 the absolute number does not.</p>
+<h2 id="how-it-actually-works-beyond-the-register-save">How It Actually Works (beyond the register save)<a class="headerlink" href="#how-it-actually-works-beyond-the-register-save" title="Permanent link">&para;</a></h2>
+<p><code>PendSV</code> is deliberately the <em>lowest</em>-priority exception on ARM Cortex-M
+specifically so a context switch never preempts a higher-priority hardware
+interrupt that's still being serviced — if the tick ISR requests a switch
+while a UART ISR is mid-flight, PendSV is left pending and only fires once
+every higher-priority exception has finished, which keeps interrupt latency
+bounded independent of scheduling activity. <code>vTaskSwitchContext</code> runs
+<em>before</em> the register save/restore, as plain C, and its only job is to pick
+which TCB's stack pointer <code>pxCurrentTCB</code> should point to next — the actual
+save/restore that follows is architecture-specific assembly that doesn't
+know or care about priorities at all, it just pushes registers onto whatever
+stack the outgoing task was using and pops registers from the incoming
+task's stack. This split (policy in C, mechanism in asm) is exactly what
+lets the same scheduler logic run on Cortex-M0, Cortex-M4F (which must also
+lazily save FPU registers, deferred until a task actually touches
+floating-point, to avoid paying that cost on every switch), Xtensa, and the
+POSIX simulator, with only the small port layer rewritten per architecture.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Assuming task switch time scales with the number of tasks.</strong> It doesn't

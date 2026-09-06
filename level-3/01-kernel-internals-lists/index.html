@@ -1514,6 +1514,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2412,6 +2434,25 @@ to <code>vTaskDelay</code> after 49.7 days at a 1kHz tick" (<code>0xFFFFFFFF</co
 rewiring on list items that were embedded in the TCB from the start. This is
 why FreeRTOS task/queue operations have bounded, predictable execution
 time: no dynamic list-node allocation ever happens on the hot path.</p>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>Every list in the kernel — Ready lists, the Delayed list, a queue's waiting
+lists — is the <em>same</em> generic doubly-linked <code>List_t</code>/<code>ListItem_t</code> structure,
+which is why one mental model (insert, remove, find-minimum) explains the
+entire scheduler's data layer. The trick that makes this fast is the
+<code>xItemValue</code> field on each <code>ListItem_t</code>: for the Delayed list it holds the
+absolute wake tick, and <code>vListInsert</code> walks the list to insert in
+ascending order, so the <em>head</em> of the Delayed list is always the next thing
+due to wake — the tick ISR only ever has to check that one head entry
+against the current tick, never scan the whole list. For a Ready list,
+<code>xItemValue</code> isn't used for ordering (all entries share one priority);
+instead the entire array <code>pxReadyTasksLists[configMAX_PRIORITIES]</code> acts as
+the ordering, and <code>uxTopReadyPriority</code>/a leading-zero-count trick locates the
+highest non-empty index directly, in effectively constant time regardless of
+how many priorities exist below it. Each TCB carries <strong>two</strong> list items
+(<code>xStateListItem</code>, <code>xEventListItem</code>) precisely so a single task can be linked
+into a state list (Ready/Delayed/Suspended) and an event list (a specific
+queue's waiting list) <em>simultaneously</em> — moving a task between states is
+just relinking pointers, never copying the TCB itself.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Assuming ready lists are scanned linearly for the highest priority.</strong>

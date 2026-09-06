@@ -1682,6 +1682,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-the-latency-budget-term-by-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (the latency budget, term by term)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-the-latency-budget-term-by-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (the latency budget, term by term)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2405,6 +2427,26 @@ to run), which makes any WCET analysis (Level 4 Module 2) built on top of it
 meaningless. <code>configUSE_MUTEXES</code> with real mutexes (not binary semaphores
 used <em>as</em> a mutex, which do not inherit priority) is a hard prerequisite for
 any latency-bounded design, not an optional correctness nicety.</p>
+<h2 id="how-it-actually-works-the-latency-budget-term-by-term">How It Actually Works (the latency budget, term by term)<a class="headerlink" href="#how-it-actually-works-the-latency-budget-term-by-term" title="Permanent link">&para;</a></h2>
+<p>Measured interrupt-to-task latency is the sum of several independently
+bounded pieces, and each has a distinct kernel-level cause. First, hardware
+vectoring and any higher-priority ISR already running (interrupt latency
+proper) — bounded by your interrupt priority scheme, not by FreeRTOS.
+Second, if <code>taskENTER_CRITICAL</code> is held anywhere in application code when the
+interrupt fires, the ISR itself may run immediately (critical sections
+disable maskable interrupts but not always all interrupt classes, port-
+dependent) but the <em>scheduler's reaction</em> to anything the ISR signals is
+deferred until the section ends — this is the mechanism-level reason
+critical sections must be kept as short as documented. Third, once the
+ISR sets <code>pxHigherPriorityTaskWoken</code> and calls <code>portYIELD_FROM_ISR</code>, the
+actual switch waits for the current interrupt (and any higher-priority one
+pending) to finish unwinding, since PendSV/the switch mechanism is
+intentionally the lowest-priority exception. Priority inversion adds a
+<em>fourth</em>, unbounded term to this chain: a mutex held by a low-priority task
+that a medium-priority task is oblivious to can make the "task resumes"
+half of ISR latency wait not microseconds but however long that low task
+takes to get preempted-in and release the mutex — which is exactly why it's
+classified as a latency bug, not merely a correctness one.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Calling any FreeRTOS API from an ISR configured above

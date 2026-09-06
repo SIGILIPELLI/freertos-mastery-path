@@ -829,6 +829,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2317,6 +2328,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2583,6 +2605,24 @@ it's telling the scheduler "wake me in 250 ms; give the CPU to someone else."</p
 </tr>
 </tbody>
 </table>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p><code>xTaskCreate</code> does three concrete things: it <code>pvPortMalloc</code>s a stack buffer of
+the size you requested (in words, tracked in bytes internally) plus a TCB
+struct, it pre-fills the stack with a <em>guard pattern</em> (so
+<code>uxTaskGetStackHighWaterMark</code> can later measure how deep it was actually
+used), and it writes a synthetic <strong>initial stack frame</strong> — register values as
+if the task had just been interrupted — with the program counter pointing at
+your task function and the link register pointing at a trap that catches a
+task falling off the end of <code>for(;;)</code>. The task is then inserted into the
+Ready list for its priority; nothing runs yet until the scheduler is invoked.
+The four states (Running/Ready/Blocked/Suspended) are literally which linked
+list a TCB's <code>xStateListItem</code> sits on — <code>vTaskDelay</code> doesn't "wait," it moves
+the TCB from Ready onto the <strong>Delayed task list</strong>, sorted by wake tick, and
+removes it from Ready so the scheduler never considers it until the tick
+handler notices its time has come and moves it back. <code>vTaskDelayUntil</code>
+differs by computing the next wake time from a <em>stored</em> last-wake value
+rather than "now," which is why it doesn't accumulate drift the way chained
+<code>vTaskDelay</code> calls do when the task itself takes variable time to run.</p>
 <h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
 <p>Build a three-task sketch in Wokwi:</p>
 <ol>

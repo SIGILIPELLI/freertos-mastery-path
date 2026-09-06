@@ -1014,6 +1014,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise-extensions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2239,6 +2250,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise-extensions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2521,6 +2543,22 @@ for — plus a wiring list, a test plan, and extensions to make it your own.</p>
    parsing or alarm printing, because it lives on the timer task and nothing
    in the system blocks for long. <em>(Module 3's promise, delivered.)</em></li>
 </ol>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>This capstone puts several kernel mechanisms to work simultaneously, which is
+exactly where scheduling bugs hide in real firmware. Every task you created
+sits in its own Ready-list slot until it blocks (on <code>vTaskDelay</code>, a queue, or
+a semaphore) — at that instant it moves onto a Blocked/Delayed list and the
+scheduler's <code>vTaskSwitchContext()</code> picks the next-highest-priority Ready task,
+which is why the ISR-driven and sensor tasks can appear to run "at once" on a
+single core: each context switch is only a few microseconds, invisible at
+human timescales. The queue linking your producer task to your consumer task
+is the same fixed-size ring buffer covered in module 4 — if the consumer runs
+at lower priority and falls behind, the queue fills and <code>xQueueSend</code> blocks
+the producer, which is the kernel's built-in backpressure rather than a bug
+to work around. If you added a mutex around shared state, remember its
+priority-inheritance bookkeeping is only engaged while a <em>higher</em>-priority
+task is actually waiting on it — briefly holding a mutex from your
+lowest-priority task while nothing else contends for it costs nothing extra.</p>
 <h2 id="exercise-extensions">Exercise — extensions<a class="headerlink" href="#exercise-extensions" title="Permanent link">&para;</a></h2>
 <p>Pick at least two:</p>
 <ol>

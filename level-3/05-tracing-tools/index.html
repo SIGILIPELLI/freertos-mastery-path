@@ -1637,6 +1637,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-where-the-trace-events-actually-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (where the trace events actually come from)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2283,6 +2294,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-where-the-trace-events-actually-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (where the trace events actually come from)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2429,6 +2451,24 @@ breakdown, or a captured worst-case latency distribution the way a real
 tracer does — for those, Tracealyzer or SystemView (or reading a logic
 analyzer trace directly) is the right tool, and no amount of counter-based
 cleverness substitutes for one when you actually need it.</p>
+<h2 id="how-it-actually-works-where-the-trace-events-actually-come-from">How It Actually Works (where the trace events actually come from)<a class="headerlink" href="#how-it-actually-works-where-the-trace-events-actually-come-from" title="Permanent link">&para;</a></h2>
+<p><code>configUSE_TRACE_FACILITY</code> doesn't add a background sampler — it inserts
+macro calls (<code>traceTASK_SWITCHED_IN</code>, <code>traceQUEUE_SEND</code>, etc.) directly at
+the exact points in the kernel's own source where those events already
+happen: <code>vTaskSwitchContext</code> calls <code>traceTASK_SWITCHED_IN</code> the instant it
+updates <code>pxCurrentTCB</code>, and <code>xQueueGenericSend</code> calls <code>traceQUEUE_SEND</code> right
+after the copy into the ring buffer succeeds. By default these macros expand
+to nothing, so a non-tracing build pays zero cost; Tracealyzer and SystemView
+each redefine them to append a compact record (event id, timestamp from a
+high-resolution timer, sometimes a task handle) into a small in-RAM ring
+buffer, which is why enabling tracing shifts overhead from "instrumentation
+computing something" to "a few extra memory writes per already-occurring
+kernel event" — it observes the real scheduling stream rather than sampling
+or guessing at it. This is also why print-statement debugging fails here:
+<code>Serial.println</code> inside a task is itself scheduled, blocking, and slow
+enough (milliseconds) to change the very interleaving you're trying to
+observe, while the trace macros run in the same handful of cycles the event
+itself already took.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Enabling <code>configUSE_TRACE_FACILITY</code> and never actually attaching a

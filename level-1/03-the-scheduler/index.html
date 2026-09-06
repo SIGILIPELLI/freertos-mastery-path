@@ -835,6 +835,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2284,6 +2295,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2452,6 +2474,52 @@ simultaneously</strong> — a mental-model upgrade that makes the data-sharing t
 of the next two modules non-optional, not just polite. Everything else in
 this level works identically with or without pinning; Level 2's ESP-IDF
 module digs into the dual-core details.</p>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>Under the hood, every task is a <strong>Task Control Block (TCB)</strong> — a C struct
+holding the task's name, priority, current state, stack pointer, and a
+<code>pxTopOfStack</code> value that points into that task's own private stack region.
+When the scheduler decides task A must stop and task B must run, it does not
+"transfer control" in any abstract sense — it performs a <strong>context switch</strong>:
+the current CPU registers (program counter, general-purpose registers, stack
+pointer) are pushed onto A's stack, A's TCB is updated to record where its
+stack pointer now sits, then B's TCB is read back to restore B's saved
+registers from B's stack, and execution resumes at exactly the instruction B
+was at when it was last preempted. This is why each task needs its own
+stack — the switch is really just "save state to this stack, load state from
+that stack."</p>
+<p>The tick interrupt is what makes this happen without cooperation. On every
+tick, the interrupt handler decrements the delay counters of any Blocked
+tasks; when a counter reaches zero, that task's TCB moves from a <strong>delayed
+list</strong> to the <strong>Ready list</strong> for its priority. The handler then asks the
+scheduler to re-evaluate: is the highest-priority Ready task the one
+currently running? If not, it sets a flag requesting a context switch, which
+happens either immediately (on return from the ISR) or, on the ESP32's dual
+FreeRTOS ports, via a similar mechanism per core. FreeRTOS keeps a small
+array of Ready lists indexed by priority (<code>pxReadyTasksLists[priority]</code>), so
+finding "the highest-priority Ready task" is just scanning from the top of
+that array down to the first non-empty list — O(1) in practice via a
+bitmap of occupied priorities on most ports.</p>
+<p>Queues and semaphores extend this same TCB machinery with a <strong>blocked-on
+this object</strong> list. When a task calls <code>xQueueReceive()</code> on an empty queue,
+its TCB is removed from the Ready list and appended to that queue's own
+list of waiting tasks (ordered by priority), and the scheduler immediately
+runs something else — the blocked task consumes zero CPU while it waits.
+When another task or ISR calls <code>xQueueSend()</code>, the kernel checks that
+waiting list: if a task is there, its TCB is moved straight back to Ready
+(and, if it outranks the currently running task, a context switch is
+requested on the spot) — the data reaches it without ever passing through
+the general Ready-list scan.</p>
+<p>This blocked-list design is also the root of <strong>priority inversion</strong> and its
+fix. If a low-priority task holds a mutex a high-priority task needs, the
+high-priority task's TCB sits on that mutex's blocked list — invisible to
+the scheduler as "urgent" until the mutex is released. FreeRTOS's mutex
+implementation (unlike a plain binary semaphore) checks this case: when a
+higher-priority task blocks on a mutex, the kernel temporarily raises the
+<em>holder's</em> priority to match, via <strong>priority inheritance</strong>, so the holder
+gets scheduled, finishes, and releases the mutex sooner — after which its
+priority drops back to normal. This is purely bookkeeping in the TCB's
+priority field plus a re-sort of Ready-list membership; no separate
+"inheritance task" exists.</p>
 <h2 id="cheat-sheet">Cheat sheet<a class="headerlink" href="#cheat-sheet" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

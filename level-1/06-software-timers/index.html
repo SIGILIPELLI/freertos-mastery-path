@@ -930,6 +930,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2295,6 +2306,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2505,6 +2527,23 @@ timestamp and a reset dance; <code>xTimerReset</code> replaces all of it.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>Software timers are <strong>not</strong> driven directly by the tick ISR — they're
+implemented on top of the exact same queue and task primitives you already
+know. FreeRTOS creates one dedicated task, the <strong>Timer Service (Daemon)
+task</strong>, at a priority you set via <code>configTIMER_TASK_PRIORITY</code>, and it owns a
+private input queue (<code>xTimerQueue</code>) plus a sorted linked list of active
+timers ordered by expiry tick. Calling <code>xTimerStart</code>/<code>xTimerChangePeriod</code>
+doesn't touch the timer list directly at all — it sends a <strong>command message</strong>
+(start/stop/reset/delete + the timer handle) onto <code>xTimerQueue</code>, which is why
+these calls are safe to make from an ISR (<code>...FromISR</code> variants) and why
+there's an implicit hop of latency between calling <code>xTimerStart</code> and the
+callback actually running. The tick ISR's only job regarding timers is
+comparing the current tick to the head of that sorted list; when a timer's
+time arrives, the tick handler unblocks the Timer Service task, which pops
+the expired timer(s) and calls your callback <strong>synchronously, inline, on the
+Timer Service task's own stack</strong> — meaning a callback that blocks stalls
+every other timer in the system behind it, since they all share this one task.</p>
 <h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
 <p>Build a "smart night-light" in Wokwi (two LEDs + one button):</p>
 <ol>

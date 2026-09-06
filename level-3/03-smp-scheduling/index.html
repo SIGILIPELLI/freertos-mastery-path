@@ -1581,6 +1581,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-why-spinlocks-not-just-critical-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (why spinlocks, not just critical sections)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2283,6 +2294,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-why-spinlocks-not-just-critical-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (why spinlocks, not just critical sections)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2444,6 +2466,22 @@ stream buffer) whose SMP-aware kernel code already performs the necessary
 cross-core synchronization and memory barriers for you, and treating raw
 shared globals between core-pinned tasks as something to avoid rather than
 something to patch with <code>volatile</code>.</p>
+<h2 id="how-it-actually-works-why-spinlocks-not-just-critical-sections">How It Actually Works (why spinlocks, not just critical sections)<a class="headerlink" href="#how-it-actually-works-why-spinlocks-not-just-critical-sections" title="Permanent link">&para;</a></h2>
+<p>On a single core, <code>taskENTER_CRITICAL()</code> only has to disable interrupts on
+that one CPU — nothing else can run, full stop. On SMP that's not enough:
+disabling interrupts on core 0 does nothing to stop core 1 from concurrently
+mutating the same Ready list, so the SMP port layers a <strong>spinlock</strong> on top —
+<code>portENTER_CRITICAL</code> disables local interrupts <em>and</em> atomically test-and-sets
+a shared lock word, busy-waiting if the other core already holds it. This is
+why SMP critical sections must be kept even shorter than single-core ones:
+time spent spinning on core 1 is CPU cycles genuinely wasted, not just
+"unavailable to lower-priority tasks" as on a single core. Cache coherency
+becomes a real trap specifically because each core has its own L1 cache —
+a flag variable one task sets on core 0 might sit only in core 0's cache
+line and never become visible to a polling loop on core 1 without a memory
+barrier or the hardware's coherency protocol synchronizing the write, a
+class of bug that simply cannot exist on a single-core build no matter how
+that code is written.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Assuming <code>configRUN_MULTIPLE_PRIORITIES=0</code> restores full single-core

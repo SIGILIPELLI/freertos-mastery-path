@@ -997,6 +997,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2517,6 +2539,26 @@ something is weird, suspect sharing first.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>Each task's stack is a plain array carved out of heap (or a static array with
+<code>xTaskCreateStatic</code>) that the CPU's stack pointer register is redirected into
+during that task's slice of run time — the kernel does this redirection as
+part of every context switch, saving the outgoing task's stack pointer into
+its TCB and loading the incoming task's. Stack overflow detection
+(<code>configCHECK_FOR_STACK_OVERFLOW</code> 1 or 2) works by inspecting how far the
+pointer has crept past the buffer's end at the moment of a context switch —
+method 1 checks if the pointer itself is out of bounds, method 2 additionally
+checks whether a canary byte pattern written at stack creation has been
+overwritten, catching overflows that method 1's simple bounds check misses.
+<code>uxTaskGetStackHighWaterMark</code> walks from the <em>far</em> end of the stack buffer
+counting how many untouched guard bytes remain — the smallest count ever
+observed since creation, not the current usage, which is why it's the right
+number for sizing decisions. The heap_1..5 allocators differ in exactly what
+data structure backs <code>pvPortMalloc</code>: heap_1 has no <code>free()</code> at all (a simple
+bump pointer — appropriate when tasks are never deleted), heap_4 maintains a
+coalescing free list to fight fragmentation, and heap_5 extends heap_4 across
+multiple disjoint memory regions (useful when internal and external/PSRAM
+memory both need to feed the same allocator).</p>
 <h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Write a task that calls a recursive function (e.g. naive <code>fib(n)</code>), and

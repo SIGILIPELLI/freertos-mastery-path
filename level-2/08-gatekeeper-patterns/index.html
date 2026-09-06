@@ -1345,6 +1345,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2272,6 +2283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2447,6 +2469,23 @@ than to serialize a slow I/O operation.</p>
   several producers at once — size it for the real worst case, not the
   steady-state average.</li>
 </ul>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>A gatekeeper task works because of the same queue-blocking mechanism from
+module 4, aimed at a specific structural goal: mutual exclusion <strong>without a
+mutex at all</strong>. Multiple producer tasks call <code>xQueueSend</code> on the gatekeeper's
+inbox queue — a plain memcpy into the ring buffer, safe for any number of
+concurrent senders because the queue's internal critical section already
+serializes concurrent sends. The gatekeeper task itself is the <em>only</em> code
+that ever touches the protected resource (a UART, a radio, a shared log),
+so there is no possibility of two tasks accessing it simultaneously and
+therefore no need for the priority-inheritance machinery a mutex provides —
+there's no "holder" to invert priority against, because the resource is
+never contended for directly at all. This beats a mutex specifically when
+the protected operation is slow (a radio transmit) and callers shouldn't
+block waiting for it: <code>xQueueSend</code> returns as soon as the message is queued,
+while the actual transmission happens later, serialized, on the gatekeeper's
+own schedule — a mutex, by contrast, would make every caller block for the
+full duration of somebody else's transmit.</p>
 <h2 id="cheat-sheet">Cheat sheet<a class="headerlink" href="#cheat-sheet" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

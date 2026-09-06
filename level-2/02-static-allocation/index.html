@@ -1177,6 +1177,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2272,6 +2283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2448,6 +2470,23 @@ observed minimum.</p>
   library, <code>malloc()</code> inside <code>printf</code> on some libc configurations) can
   still fragment the heap.</li>
 </ul>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p><code>xTaskCreateStatic</code> and friends skip <code>pvPortMalloc</code> entirely by having <em>you</em>
+supply the memory (a <code>StaticTask_t</code> struct and a stack array) at compile
+time — the kernel then does exactly the same initialization it always does
+(writing the synthetic startup stack frame, linking the TCB into the Ready
+list) except it writes into memory the linker already placed, rather than
+memory carved from the heap at runtime. This has a scheduling-relevant
+consequence beyond avoiding fragmentation: heap allocators like heap_4 run
+inside a <strong>critical section</strong> (interrupts briefly disabled) while they walk
+the free list, so a dynamic <code>xTaskCreate</code> call has a small but real bounded
+delay and a rare worst case tied to free-list length; a static creation has
+none of that — its cost is just the struct writes, which is why safety-
+critical or hard-real-time systems often mandate <code>configSUPPORT_DYNAMIC_ALLOCATION
+== 0</code> so <em>no</em> code path can ever hit the heap allocator's critical section at
+an inconvenient moment. The stack sizing math doesn't change at all —
+<code>uxTaskGetStackHighWaterMark</code> measures the same guard-byte erosion whether
+the buffer came from <code>malloc</code> or a global array.</p>
 <h2 id="cheat-sheet">Cheat sheet<a class="headerlink" href="#cheat-sheet" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

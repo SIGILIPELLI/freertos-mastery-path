@@ -1598,6 +1598,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-the-region-swap-on-every-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (the region-swap on every switch)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-the-region-swap-on-every-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works (the region-swap on every switch)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2404,6 +2426,24 @@ past a task's stack with no access rights turns any stack overflow into an
 instant <code>MemManage</code> fault at the exact instruction that overran — a strictly
 stronger and earlier guarantee than the pattern-based check alone, at the
 cost of consuming one of the limited MPU regions per task.</p>
+<h2 id="how-it-actually-works-the-region-swap-on-every-switch">How It Actually Works (the region-swap on every switch)<a class="headerlink" href="#how-it-actually-works-the-region-swap-on-every-switch" title="Permanent link">&para;</a></h2>
+<p>FreeRTOS-MPU works by reprogramming the Cortex-M's Memory Protection Unit
+region registers as part of every context switch to an unprivileged task —
+each MPU-aware TCB carries its own small table of region base/size/
+permission settings (its private stack, plus any explicitly shared regions),
+and <code>vTaskSwitchContext</code>'s successor in the MPU port writes that table into
+the MPU hardware registers before the task resumes, so one task's stack
+memory is physically inaccessible (a hard fault, not a silent bug) to
+another task's unprivileged code even though both live in the same flat
+physical address space. A task only escalates to privileged mode through a
+narrow, deliberate gate — a supervisor call (<code>svc</code> instruction) trapping into
+a handler the kernel controls — which is precisely why this is "protection
+against accidental corruption," not general security: any code that finds a
+way to trigger that same trap, or that was already linked as privileged, sees
+the whole address space. The stack-overflow connection is mechanical: a
+correctly configured MPU region around a task's stack turns an overflow that
+would otherwise silently corrupt an adjacent TCB into an immediate, precisely
+attributable memory-fault exception at the moment the boundary is crossed.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Assuming <code>configENABLE_MPU</code> provides isolation without also auditing

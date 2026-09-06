@@ -868,6 +868,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2283,6 +2294,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2505,6 +2527,23 @@ still reading it, corrupting data only under load.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>A FreeRTOS queue is a fixed-size ring buffer allocated as one contiguous
+block (<code>item size * queue length</code> bytes) plus a small header tracking head,
+tail, and message-waiting count — <code>xQueueSend</code> is a <code>memcpy</code> of your struct
+into the next free slot, not a pointer handoff, which is exactly why passing
+structs by value is the safe default (the sender's local variable can go out
+of scope immediately after). The interesting mechanism is what happens when
+the queue is full or empty: instead of busy-waiting, the calling task's TCB
+is unlinked from the Ready list and linked onto the queue's own
+<strong>xTasksWaitingToSend</strong> or <strong>xTasksWaitingToReceive</strong> list, sorted by
+priority, and the scheduler picks a new task to run — the blocked task
+consumes zero CPU until woken. When <code>xQueueReceive</code> frees a slot, the kernel
+checks that send-waiting list and, if a higher-priority task was waiting,
+immediately unblocks it and <strong>switches to it before returning</strong> to whichever
+lower-priority task just made room — this is why a queue can hand data from a
+low-priority producer to a high-priority consumer with sub-millisecond
+latency instead of waiting for the next scheduler tick.</p>
 <h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
 <p>Build a two-producer, one-consumer pipeline:</p>
 <ol>

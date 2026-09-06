@@ -2086,6 +2086,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#traps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2389,6 +2411,28 @@ firmware image with its own versioning, and the two images' compatibility
 with each other (a protocol version mismatch between the two independently
 updatable firmwares) becomes a real, additional failure mode dual-bank OTA
 alone doesn't address.</p>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>The mailbox-interrupt path is worth tracing at the TCB level because it's
+where AMP's "no shared kernel" boundary meets the ordinary preemptive-
+scheduling machinery each core still runs on its own. The receiving core's
+mailbox ISR runs exactly like any other ISR on that core: it doesn't touch
+the other core's scheduler at all — it can only affect Ready/Blocked-list
+state <em>on its own core</em>, typically via <code>xQueueSendFromISR</code> or
+<code>xTaskNotifyFromISR</code> against a task whose TCB is already sitting on that
+queue's blocked list. If that give makes a higher-priority task Ready than
+the one currently running, the ISR requests a context switch on exit
+(<code>portYIELD_FROM_ISR</code>), exactly as it would for a UART or timer interrupt —
+the "message" is just the payload that gets copied into the queue; the
+scheduling decision afterward uses the same priority-comparison logic as
+every other event in this course.</p>
+<p>This local-only reach is also exactly why boot ordering matters so much:
+each core's Ready lists, delayed-task list, and idle task are initialized
+independently when that core's <code>vTaskStartScheduler()</code> runs. There is no
+global "system tick" shared between AMP cores' schedulers, so a message
+sent before the receiving core's scheduler and mailbox ISR are both live
+has nowhere to land — the remoteproc load→start sequence exists precisely
+to guarantee the receiving core's own kernel data structures are up before
+the primary core assumes it can signal it.</p>
 <h2 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Assuming AMP gets automatic load balancing or work migration the way

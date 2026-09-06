@@ -1278,6 +1278,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2250,6 +2261,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cheat-sheet" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2400,6 +2422,22 @@ own the dispatch logic with no shared mutable state at all.</p>
   member from an ISR uses the ordinary <code>...FromISR</code> send/give calls on the
   member itself.</li>
 </ul>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>A queue set doesn't merge the data paths of its member queues/semaphores at
+all — under the hood, every member still has its own independent buffer and
+list of waiting tasks exactly as before. What a queue set actually is is one
+more queue, holding not your data but <strong>handles</strong> to whichever member just
+became non-empty: when you <code>xQueueSend</code> to a queue that has been added to a
+set, the send operation, immediately after placing your item, also pushes
+that queue's own handle onto the set's internal queue and wakes the task
+blocked in <code>xQueueSelectFromSet</code>. That task then reads the returned handle
+and calls a plain <code>xQueueReceive</code> on it to actually pull the data — two
+queue operations happen per item instead of one, which is the real cost of
+being able to block on N queues from a single task. The single-consumer
+rule exists because if two tasks were both waiting in
+<code>xQueueSelectFromSet</code>, whichever wakes first could drain the underlying
+member queue before the second task's subsequent <code>xQueueReceive</code> finds
+anything there, turning "selected" into a race rather than a guarantee.</p>
 <h2 id="cheat-sheet">Cheat sheet<a class="headerlink" href="#cheat-sheet" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
