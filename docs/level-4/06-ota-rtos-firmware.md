@@ -158,6 +158,12 @@ designed to make structurally impossible rather than merely unlikely.
 | Flash-write gatekeeper task | Single owner of flash writes | Corruption from concurrent writers |
 | Watchdog-backed health confirmation | Forces rollback if new firmware hangs | Silent permanent failure with no recovery |
 
+## 🔀 Related lessons on other tracks
+
+- [Embedded — OTA Firmware Updates](https://sigilipelli.github.io/embedded-mastery-path/level-2/05-ota-updates/)
+- [Edge AI — OTA Model Updates](https://sigilipelli.github.io/edge-ai-mastery-path/level-4/02-ota-model-updates/)
+- [Embedded Linux — 03 · OTA Updates (RAUC, SWUpdate, OSTree)](https://sigilipelli.github.io/embedded-linux-mastery-path/level-4/03-ota-updates/)
+
 ## Exercise
 
 1. Design (on paper) a full OTA state machine for a dual-bank device:

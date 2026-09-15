@@ -161,6 +161,11 @@ the gatekeeper task is the only one whose TCB ever sits on it.
 | Fault containment | MPU (L3M4) + deliberate per-subsystem restart-vs-reset decision |
 | Resource ownership | One gatekeeper task per shared resource (L2M8), no exceptions |
 
+## 🔀 Related lessons on other tracks
+
+- [Embedded — Production Firmware Architecture](https://sigilipelli.github.io/embedded-mastery-path/level-4/01-production-firmware-architecture/)
+- [Embedded Python — Production Firmware Architecture](https://sigilipelli.github.io/embedded-python-mastery-path/level-4/01-production-architecture/)
+
 ## Exercise
 
 1. Take a codebase you've written earlier in this course (or a real project)

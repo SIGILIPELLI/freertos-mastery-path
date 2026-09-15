@@ -180,6 +180,10 @@ timers layered on this same dual-scheduler foundation.
 | Stack units | Words (`StackType_t`) on most ports | Bytes, on ESP-IDF's `xTaskCreate` |
 | Affinity constant | N/A | `tskNO_AFFINITY`, or explicit core `0`/`1` |
 
+## 🔀 Related lessons on other tracks
+
+- [Embedded — ESP-IDF Development](https://sigilipelli.github.io/embedded-mastery-path/level-2/02-esp-idf/)
+
 ## Exercise
 
 1. Create two tasks pinned to different cores that both increment a shared

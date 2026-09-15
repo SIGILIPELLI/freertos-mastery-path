@@ -181,6 +181,10 @@ the system the code actually runs inside.
 | Static WCET analysis | Tool models CFG + processor pipeline/cache | Provable upper bound, given an accurate processor model |
 | Blocking-time extension | Adds priority-inheritance-bounded blocking to Cᵢ | Required for tasks that share mutexes |
 
+## 🔀 Related lessons on other tracks
+
+- [S32K Automotive — AUTOSAR OS & Timing Analysis](https://sigilipelli.github.io/s32k-mastery-path/level-4/06-autosar-os-timing/)
+
 ## Exercise
 
 1. Take the three-task example above, add a fourth task (period 50ms, WCET

@@ -284,3 +284,7 @@ Finish those and you've built the Level 2 equivalent of the Level 1
 capstone: real fan-in, real backpressure isolation, real static-RAM
 guarantees, and real fault recovery — the operational concerns that
 separate a demo from a device you'd actually deploy. Onward to Level 3.
+
+## 🔀 Related lessons on other tracks
+
+- [NodeMCU/IoT — Capstone — Secure Multi-Sensor IoT Gateway](https://sigilipelli.github.io/nodemcu-mastery-path/level-3/10-capstone-iot-gateway/)

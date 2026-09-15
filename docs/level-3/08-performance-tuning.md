@@ -149,6 +149,12 @@ config knobs.
 | Is an optimization real or noise? | Multiple runs, reported variance | Single-run deltas under ~1% are not conclusive |
 | Does this change hurt worst-case latency? | Cross-check against Module 7 / Level 4 Module 2 | Throughput gains can cost tail latency |
 
+## 🔀 Related lessons on other tracks
+
+- [Data Engineering — 07 · Performance Tuning for Pipelines](https://sigilipelli.github.io/data-engineering-mastery-path/level-3/07-performance-tuning/)
+- [Pyspark — 05 · Performance Tuning](https://sigilipelli.github.io/pyspark-mastery-path/level-3/05-performance-tuning/)
+- [Tableau — 05 · Advanced Performance Tuning](https://sigilipelli.github.io/tableau-mastery-path/level-3/06-advanced-performance-tuning/)
+
 ## Exercise
 
 1. Reproduce the "+8 suspended tasks" benchmark on your own machine and

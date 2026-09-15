@@ -168,6 +168,12 @@ never depends on the health of the task it's supervising.
 | Sensor/input feed silence | Queue receive timeout | Safe-state entry, fault counter, escalate if persistent |
 | Non-critical subsystem failure | Subsystem-specific health check | Graceful degradation, not full failure |
 
+## 🔀 Related lessons on other tracks
+
+- [Azure — 07 · High Availability & Disaster Recovery](https://sigilipelli.github.io/azure-mastery-path/level-3/07-ha-disaster-recovery/)
+- [REST API — 06 · Multi-Region & High Availability APIs](https://sigilipelli.github.io/rest-api-mastery-path/level-4/06-multi-region-ha/)
+- [Server Ops — 01 · High Availability Concepts (redundancy, failover, health checks)](https://sigilipelli.github.io/server-ops-mastery-path/level-3/01-ha-concepts/)
+
 ## Exercise
 
 1. Take a task design from earlier in this course (Level 2 Module 8's

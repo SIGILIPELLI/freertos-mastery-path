@@ -155,6 +155,11 @@ actually running.
 | Field-only fault discovery | Telemetry/crash reporting | Level 4 Module 7's fault-detection mechanisms |
 | Silicon end-of-life resilience | HAL/layering discipline | Level 4 Module 3 |
 
+## 🔀 Related lessons on other tracks
+
+- [English Fluency & IELTS — 08 · Building Long-Term Fluency Habits](https://sigilipelli.github.io/english-fluency-mastery-path/level-4/08-building-long-term-fluency-habits/)
+- [Servant Leadership — 08 · Legacy & Long-Term Impact](https://sigilipelli.github.io/servant-leadership-mastery-path/level-4/08-legacy-long-term-impact/)
+
 ## Exercise
 
 1. Look up FreeRTOS-Kernel's current published LTS release(s) and support

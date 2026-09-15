@@ -161,6 +161,10 @@ kernel objects two tasks actually share.
 | RTOS timing evidence | RMA/schedulability, WCET (L4M2) | Same |
 | Kernel-level evidence shortcut | Certified kernel (e.g. SAFERTOS, L4M1) | Same |
 
+## 🔀 Related lessons on other tracks
+
+- [Automotive Testing — 04 · Functional Safety Testing (ISO 26262)](https://sigilipelli.github.io/automotive-testing-mastery-path/level-3/04-functional-safety-testing/)
+
 ## Exercise
 
 1. Find a publicly available ISO 26262 HARA example (several are published
