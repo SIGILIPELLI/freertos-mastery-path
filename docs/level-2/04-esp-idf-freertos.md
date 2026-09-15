@@ -1,3 +1,7 @@
+---
+description: "ESP-IDF FreeRTOS Specifics — Everything in Level 1 targets vanilla, single-core FreeRTOS. ESP-IDF ships a fork of FreeRTOS (based on the mainline kernel…"
+---
+
 # ESP-IDF FreeRTOS Specifics
 
 Everything in Level 1 targets vanilla, single-core FreeRTOS. ESP-IDF ships

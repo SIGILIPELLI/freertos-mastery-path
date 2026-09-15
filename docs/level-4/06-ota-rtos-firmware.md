@@ -1,3 +1,7 @@
+---
+description: "OTA Updates for RTOS Firmware — The device downloads and writes the new image entirely into the inactive bank while the active bank keeps running the…"
+---
+
 # OTA Updates for RTOS Firmware
 
 **Verification note for this module:** OTA update mechanisms depend on flash

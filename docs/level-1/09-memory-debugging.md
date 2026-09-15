@@ -1,3 +1,7 @@
+---
+description: "Memory & Debugging — The two questions every new RTOS programmer eventually asks at 2 a.m.: 'how big should this task's stack be?' and 'why did it crash?'…"
+---
+
 # 09 · Memory & Debugging
 
 The two questions every new RTOS programmer eventually asks at 2 a.m.: *"how

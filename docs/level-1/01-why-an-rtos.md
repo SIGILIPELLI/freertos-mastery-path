@@ -1,3 +1,7 @@
+---
+description: "Why an RTOS? — Almost every microcontroller program starts life as a superloop: one loop() that reads inputs, does work, and writes outputs, forever. It's…"
+---
+
 # 01 · Why an RTOS?
 
 Almost every microcontroller program starts life as a **superloop**: one

@@ -1,3 +1,7 @@
+---
+description: "Project — Instrumented RTOS Firmware — This project combines Modules 1, 2, 5, 7, and 8 into one running system: a multi-task firmware design that is…"
+---
+
 # Project — Instrumented RTOS Firmware
 
 This project combines Modules 1, 2, 5, 7, and 8 into one running system: a

@@ -1,3 +1,7 @@
+---
+description: "Capstone — Smart Sensor Device — Time to assemble everything. This capstone builds a complete multi-task 'smart sensor device' on the ESP32 in Wokwi: a…"
+---
+
 # 10 · Capstone — Smart Sensor Device
 
 Time to assemble everything. This capstone builds a complete multi-task

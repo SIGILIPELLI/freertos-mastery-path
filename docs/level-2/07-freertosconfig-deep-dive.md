@@ -1,3 +1,7 @@
+---
+description: "FreeRTOSConfig.h Deep Dive — Every module so far has referenced individual configXXX macros in passing. This module treats FreeRTOSConfig.h as a single…"
+---
+
 # FreeRTOSConfig.h Deep Dive
 
 Every module so far has referenced individual `configXXX` macros in

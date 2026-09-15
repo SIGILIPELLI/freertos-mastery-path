@@ -1,3 +1,7 @@
+---
+description: "Tickless Idle & Low Power — By default FreeRTOS wakes the CPU on every tick interrupt — typically every 1 ms — whether or not any task needs to run. On a…"
+---
+
 # Tickless Idle & Low Power
 
 By default FreeRTOS wakes the CPU on every tick interrupt — typically every

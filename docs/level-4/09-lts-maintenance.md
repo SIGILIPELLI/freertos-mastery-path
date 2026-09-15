@@ -1,3 +1,7 @@
+---
+description: "Long-Term Maintenance & LTS Strategy — This module covers the engineering-process side of shipping FreeRTOS in a product with a multi-year field lifetime…"
+---
+
 # Long-Term Maintenance & LTS Strategy
 
 This module covers the engineering-process side of shipping FreeRTOS in a

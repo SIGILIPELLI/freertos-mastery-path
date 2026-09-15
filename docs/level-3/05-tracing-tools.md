@@ -1,3 +1,7 @@
+---
+description: "Tracing — Tracealyzer & SystemView — Every module so far could be debugged by reasoning about a handful of tasks. Real systems have dozens of tasks, ISRs…"
+---
+
 # Tracing — Tracealyzer & SystemView
 
 **Verification note for this module:** both Percepio Tracealyzer and Segger

@@ -1,3 +1,7 @@
+---
+description: "Multi-Core AMP Architectures — Level 3 Module 3 covered SMP: one FreeRTOS scheduler instance, one set of ready lists, spread across symmetric, identical…"
+---
+
 # Multi-Core AMP Architectures
 
 **Verification note for this module:** Asymmetric Multi-Processing across

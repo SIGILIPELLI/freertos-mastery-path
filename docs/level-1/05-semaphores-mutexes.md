@@ -1,3 +1,7 @@
+---
+description: "Semaphores & Mutexes — Queues move data; semaphores move signals — 'something happened,' 'a resource is free.' Their cousin the mutex protects shared…"
+---
+
 # 05 · Semaphores & Mutexes
 
 Queues move *data*; semaphores move *signals* — "something happened," "a

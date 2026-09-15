@@ -1,3 +1,7 @@
+---
+description: "Safety-Certified FreeRTOS (SAFERTOS) — This is the single most important framing correction for this module. SAFERTOS is a separate codebase…"
+---
+
 # Safety-Certified FreeRTOS (SAFERTOS)
 
 **Verification note for this module:** SAFERTOS is a separate, commercially

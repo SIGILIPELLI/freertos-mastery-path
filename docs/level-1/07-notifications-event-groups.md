@@ -1,3 +1,7 @@
+---
+description: "Task Notifications & Event Groups — Queues and semaphores are general-purpose — and pay for it in RAM and cycles. When the communication pattern is simple…"
+---
+
 # 07 · Task Notifications & Event Groups
 
 Queues and semaphores are general-purpose — and pay for it in RAM and

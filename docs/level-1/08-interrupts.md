@@ -1,3 +1,7 @@
+---
+description: "Interrupts & the RTOS — Interrupts are how hardware talks to your firmware: a pin changes, a timer fires, a byte arrives, and the CPU drops everything to…"
+---
+
 # 08 · Interrupts & the RTOS
 
 Interrupts are how hardware talks to your firmware: a pin changes, a timer

@@ -1,3 +1,7 @@
+---
+description: "Porting FreeRTOS to a New MCU — Every vendor SDK you've used through Level 2 (ESP-IDF, an S32K BSP) already ships a working FreeRTOS port. This module…"
+---
+
 # Porting FreeRTOS to a New MCU
 
 Every vendor SDK you've used through Level 2 (ESP-IDF, an S32K BSP) already

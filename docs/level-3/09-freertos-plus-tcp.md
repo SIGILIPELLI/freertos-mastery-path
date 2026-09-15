@@ -1,3 +1,7 @@
+---
+description: "Networking — FreeRTOS-Plus-TCP — FreeRTOS-Plus-TCP is Amazon/the FreeRTOS project's own lwIP-alternative TCP/IP stack, built from the ground up around…"
+---
+
 # Networking — FreeRTOS-Plus-TCP
 
 **Verification note for this module:** FreeRTOS-Plus-TCP requires a network

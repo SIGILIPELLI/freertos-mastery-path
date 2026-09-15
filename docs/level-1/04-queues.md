@@ -1,3 +1,7 @@
+---
+description: "Queues — Tasks are only half the story — the other half is getting data between them without corruption. Sharing globals between preempting (or truly…"
+---
+
 # 04 · Queues
 
 Tasks are only half the story — the other half is getting data between them

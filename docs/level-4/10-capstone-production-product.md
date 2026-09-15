@@ -1,3 +1,7 @@
+---
+description: "Capstone — Production RTOS Product — This capstone pulls together the entire course — Level 1's primitives, Level 2's patterns, Level 3's kernel internals…"
+---
+
 # Capstone — Production RTOS Product
 
 This capstone pulls together the entire course — Level 1's primitives,

@@ -1,3 +1,7 @@
+---
+description: "Formal Timing Analysis (RMA & WCET) — Every module in this course has assigned task priorities by intuition or by domain reasoning ('the sensor ISR…"
+---
+
 # Formal Timing Analysis (RMA & WCET)
 
 **Verification note for this module:** Rate Monotonic Analysis is

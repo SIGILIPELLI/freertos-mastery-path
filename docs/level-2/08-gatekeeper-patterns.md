@@ -1,3 +1,7 @@
+---
+description: "Gatekeeper Tasks & Design Patterns — Level 1 built individual primitives — queues, semaphores, mutexes. This module is about composing them into…"
+---
+
 # Gatekeeper Tasks & Design Patterns
 
 Level 1 built individual primitives — queues, semaphores, mutexes. This

@@ -1,3 +1,7 @@
+---
+description: "Performance Tuning & Measurement — This module pulls together Module 1 (kernel internals), Module 2 (context switching), Module 5 (tracing), and Module 7…"
+---
+
 # Performance Tuning & Measurement
 
 This module pulls together Module 1 (kernel internals), Module 2 (context

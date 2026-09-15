@@ -1,3 +1,7 @@
+---
+description: "Software Timers — Not everything deserves a task. 'Blink the status LED,' 'time out this pairing window,' 'debounce that button' — giving each of these a…"
+---
+
 # 06 · Software Timers
 
 Not everything deserves a task. "Blink the status LED," "time out this

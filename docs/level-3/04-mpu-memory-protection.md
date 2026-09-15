@@ -1,3 +1,7 @@
+---
+description: "MPU Support & Memory Protection — Standard FreeRTOS has no memory isolation between tasks at all — any task can read or write any other task's stack, the…"
+---
+
 # MPU Support & Memory Protection
 
 **Verification note for this module:** the Memory Protection Unit is real

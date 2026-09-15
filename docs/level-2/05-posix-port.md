@@ -1,3 +1,7 @@
+---
+description: "POSIX/Linux Simulation Port — Every prior module assumed real hardware — flash it, watch an LED, measure current draw. But most FreeRTOS design work (task…"
+---
+
 # POSIX/Linux Simulation Port
 
 Every prior module assumed real hardware — flash it, watch an LED, measure

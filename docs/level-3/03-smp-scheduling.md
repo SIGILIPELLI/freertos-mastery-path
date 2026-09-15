@@ -1,3 +1,7 @@
+---
+description: "SMP Scheduling — This single-scheduler design is deliberate: it means the mental model from every prior module (one ready list per priority, highest…"
+---
+
 # SMP Scheduling
 
 **Verification note for this module:** FreeRTOS-Kernel's SMP support requires

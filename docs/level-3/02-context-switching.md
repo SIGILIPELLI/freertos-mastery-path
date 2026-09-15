@@ -1,3 +1,7 @@
+---
+description: "Context Switching Deep Dive — Module 1 explained which task the scheduler picks next; this module covers what actually happens in the microseconds around…"
+---
+
 # Context Switching Deep Dive
 
 Module 1 explained *which* task the scheduler picks next; this module covers

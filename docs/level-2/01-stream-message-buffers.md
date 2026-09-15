@@ -1,3 +1,7 @@
+---
+description: "Stream & Message Buffers — Queues copy fixed-size items. That's the wrong shape for two very common jobs: a UART/DMA ISR handing off a raw byte stream, or…"
+---
+
 # Stream & Message Buffers
 
 Queues copy fixed-size items. That's the wrong shape for two very common

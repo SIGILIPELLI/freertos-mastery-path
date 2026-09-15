@@ -1,3 +1,7 @@
+---
+description: "Secure Firmware & TrustZone — Level 3 Module 4 was explicit that FreeRTOS-MPU is bug containment between cooperating tasks, not a security boundary…"
+---
+
 # Secure Firmware & TrustZone
 
 **Verification note for this module:** ARM TrustZone-M requires an

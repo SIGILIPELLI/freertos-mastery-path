@@ -1,3 +1,7 @@
+---
+description: "Kernel Internals — Lists & Ready Lists — Every list is circular and always contains at least the sentinel xListEnd, which has the maximum possible…"
+---
+
 # Kernel Internals — Lists & Ready Lists
 
 Every module so far has used the kernel through its public API — `xTaskCreate`,

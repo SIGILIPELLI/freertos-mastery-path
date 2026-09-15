@@ -1,3 +1,7 @@
+---
+description: "Your First Tasks — A task is FreeRTOS's unit of concurrency: an ordinary C function with its own stack and priority, running an infinite loop, scheduled…"
+---
+
 # 02 · Your First Tasks
 
 A **task** is FreeRTOS's unit of concurrency: an ordinary C function with its

@@ -1,3 +1,7 @@
+---
+description: "Project — Multi-Sensor Gateway — This project assembles Level 2's toolkit into one device: a gateway that ingests several sensor streams, filters and…"
+---
+
 # Project — Multi-Sensor Gateway
 
 This project assembles Level 2's toolkit into one device: a **gateway**

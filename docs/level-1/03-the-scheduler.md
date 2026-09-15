@@ -1,3 +1,7 @@
+---
+description: "The Scheduler — The scheduler is the heart of the kernel: the piece of code that decides, at every moment, which task owns the CPU. Its rule is short…"
+---
+
 # 03 · The Scheduler
 
 The scheduler is the heart of the kernel: the piece of code that decides, at

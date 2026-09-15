@@ -1,3 +1,7 @@
+---
+description: "Production Firmware Architecture — This module is architectural review and engineering-practice guidance, not a buildable code exercise — the patterns…"
+---
+
 # Production Firmware Architecture
 
 This module is architectural review and engineering-practice guidance, not a

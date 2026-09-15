@@ -1,3 +1,7 @@
+---
+description: "Fault-Tolerant & High-Availability Design — This module is architectural/design-pattern content covering how production RTOS systems detect and recover…"
+---
+
 # Fault-Tolerant & High-Availability Design
 
 This module is architectural/design-pattern content covering how production

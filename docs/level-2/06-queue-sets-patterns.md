@@ -1,3 +1,7 @@
+---
+description: "Queue Sets & Advanced Queue Patterns — Level 1 Module 4 covered a task blocking on a single queue. Real systems often need a task to wait on several input…"
+---
+
 # Queue Sets & Advanced Queue Patterns
 
 Level 1 Module 4 covered a task blocking on a single queue. Real systems

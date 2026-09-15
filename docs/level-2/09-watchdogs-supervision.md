@@ -1,3 +1,7 @@
+---
+description: "Watchdogs & Task Supervision — Every pattern so far assumes tasks behave: they yield, they don't deadlock, they don't spin forever inside a bad driver…"
+---
+
 # Watchdogs & Task Supervision
 
 Every pattern so far assumes tasks behave: they yield, they don't deadlock,

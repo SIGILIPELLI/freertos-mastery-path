@@ -1,3 +1,7 @@
+---
+description: "Static Allocation — Every xTaskCreate, xQueueCreate, and xSemaphoreCreateMutex call in Level 1 pulled memory from the FreeRTOS heap (pvPortMalloc under…"
+---
+
 # Static Allocation
 
 Every `xTaskCreate`, `xQueueCreate`, and `xSemaphoreCreateMutex` call in

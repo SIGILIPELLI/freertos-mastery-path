@@ -1,3 +1,7 @@
+---
+description: "Certification Workflows (IEC 61508 / ISO 26262) — ISO 26262 permits ASIL decomposition — splitting a high-ASIL requirement across multiple, sufficiently…"
+---
+
 # Certification Workflows (IEC 61508 / ISO 26262)
 
 **Verification note for this module:** certification workflows are

@@ -1,3 +1,7 @@
+---
+description: "Advanced ISR & Latency Design — Level 1 covered the basic rule: never call a blocking API from an ISR, use the ...FromISR variants. This module goes…"
+---
+
 # Advanced ISR & Latency Design
 
 Level 1 covered the basic rule: never call a blocking API from an ISR, use
