@@ -151,9 +151,9 @@ config knobs.
 
 ## 🔀 Related lessons on other tracks
 
-- [Data Engineering — 07 · Performance Tuning for Pipelines](https://sigilipelli.github.io/data-engineering-mastery-path/level-3/07-performance-tuning/)
-- [Pyspark — 05 · Performance Tuning](https://sigilipelli.github.io/pyspark-mastery-path/level-3/05-performance-tuning/)
-- [Tableau — 05 · Advanced Performance Tuning](https://sigilipelli.github.io/tableau-mastery-path/level-3/06-advanced-performance-tuning/)
+- [Data Engineering — 07 · Performance Tuning for Pipelines](https://learnmasterypath.com/data-engineering-mastery-path/level-3/07-performance-tuning/)
+- [Pyspark — 05 · Performance Tuning](https://learnmasterypath.com/pyspark-mastery-path/level-3/05-performance-tuning/)
+- [Tableau — 05 · Advanced Performance Tuning](https://learnmasterypath.com/tableau-mastery-path/level-3/06-advanced-performance-tuning/)
 
 ## Exercise
 

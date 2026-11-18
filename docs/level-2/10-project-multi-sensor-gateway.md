@@ -287,4 +287,4 @@ separate a demo from a device you'd actually deploy. Onward to Level 3.
 
 ## 🔀 Related lessons on other tracks
 
-- [NodeMCU/IoT — Capstone — Secure Multi-Sensor IoT Gateway](https://sigilipelli.github.io/nodemcu-mastery-path/level-3/10-capstone-iot-gateway/)
+- [NodeMCU/IoT — Capstone — Secure Multi-Sensor IoT Gateway](https://learnmasterypath.com/nodemcu-mastery-path/level-3/10-capstone-iot-gateway/)

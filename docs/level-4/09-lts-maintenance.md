@@ -157,8 +157,8 @@ actually running.
 
 ## 🔀 Related lessons on other tracks
 
-- [English Fluency & IELTS — 08 · Building Long-Term Fluency Habits](https://sigilipelli.github.io/english-fluency-mastery-path/level-4/08-building-long-term-fluency-habits/)
-- [Servant Leadership — 08 · Legacy & Long-Term Impact](https://sigilipelli.github.io/servant-leadership-mastery-path/level-4/08-legacy-long-term-impact/)
+- [English Fluency & IELTS — 08 · Building Long-Term Fluency Habits](https://learnmasterypath.com/english-fluency-mastery-path/level-4/08-building-long-term-fluency-habits/)
+- [Servant Leadership — 08 · Legacy & Long-Term Impact](https://learnmasterypath.com/servant-leadership-mastery-path/level-4/08-legacy-long-term-impact/)
 
 ## Exercise
 

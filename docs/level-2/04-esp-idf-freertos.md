@@ -182,7 +182,7 @@ timers layered on this same dual-scheduler foundation.
 
 ## 🔀 Related lessons on other tracks
 
-- [Embedded — ESP-IDF Development](https://sigilipelli.github.io/embedded-mastery-path/level-2/02-esp-idf/)
+- [Embedded — ESP-IDF Development](https://learnmasterypath.com/embedded-mastery-path/level-2/02-esp-idf/)
 
 ## Exercise
 

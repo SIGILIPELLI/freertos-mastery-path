@@ -170,9 +170,9 @@ never depends on the health of the task it's supervising.
 
 ## 🔀 Related lessons on other tracks
 
-- [Azure — 07 · High Availability & Disaster Recovery](https://sigilipelli.github.io/azure-mastery-path/level-3/07-ha-disaster-recovery/)
-- [REST API — 06 · Multi-Region & High Availability APIs](https://sigilipelli.github.io/rest-api-mastery-path/level-4/06-multi-region-ha/)
-- [Server Ops — 01 · High Availability Concepts (redundancy, failover, health checks)](https://sigilipelli.github.io/server-ops-mastery-path/level-3/01-ha-concepts/)
+- [Azure — 07 · High Availability & Disaster Recovery](https://learnmasterypath.com/azure-mastery-path/level-3/07-ha-disaster-recovery/)
+- [REST API — 06 · Multi-Region & High Availability APIs](https://learnmasterypath.com/rest-api-mastery-path/level-4/06-multi-region-ha/)
+- [Server Ops — 01 · High Availability Concepts (redundancy, failover, health checks)](https://learnmasterypath.com/server-ops-mastery-path/level-3/01-ha-concepts/)
 
 ## Exercise
 

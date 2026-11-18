@@ -163,8 +163,8 @@ the gatekeeper task is the only one whose TCB ever sits on it.
 
 ## 🔀 Related lessons on other tracks
 
-- [Embedded — Production Firmware Architecture](https://sigilipelli.github.io/embedded-mastery-path/level-4/01-production-firmware-architecture/)
-- [Embedded Python — Production Firmware Architecture](https://sigilipelli.github.io/embedded-python-mastery-path/level-4/01-production-architecture/)
+- [Embedded — Production Firmware Architecture](https://learnmasterypath.com/embedded-mastery-path/level-4/01-production-firmware-architecture/)
+- [Embedded Python — Production Firmware Architecture](https://learnmasterypath.com/embedded-python-mastery-path/level-4/01-production-architecture/)
 
 ## Exercise
 

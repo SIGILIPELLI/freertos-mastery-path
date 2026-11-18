@@ -183,7 +183,7 @@ the system the code actually runs inside.
 
 ## 🔀 Related lessons on other tracks
 
-- [S32K Automotive — AUTOSAR OS & Timing Analysis](https://sigilipelli.github.io/s32k-mastery-path/level-4/06-autosar-os-timing/)
+- [S32K Automotive — AUTOSAR OS & Timing Analysis](https://learnmasterypath.com/s32k-mastery-path/level-4/06-autosar-os-timing/)
 
 ## Exercise
 

@@ -151,9 +151,9 @@ tickless idle is disabled or bounded near any hard real-time deadline.
 
 ## 🔀 Related lessons on other tracks
 
-- [Edge AI — Ultra-Low-Power Inference](https://sigilipelli.github.io/edge-ai-mastery-path/level-4/07-ultra-low-power-inference/)
-- [Embedded — Low-Power Design Deep Dive](https://sigilipelli.github.io/embedded-mastery-path/level-3/05-low-power-design/)
-- [S32K Automotive — Low-Power Modes & Wakeup Sources](https://sigilipelli.github.io/s32k-mastery-path/level-2/05-low-power-modes/)
+- [Edge AI — Ultra-Low-Power Inference](https://learnmasterypath.com/edge-ai-mastery-path/level-4/07-ultra-low-power-inference/)
+- [Embedded — Low-Power Design Deep Dive](https://learnmasterypath.com/embedded-mastery-path/level-3/05-low-power-design/)
+- [S32K Automotive — Low-Power Modes & Wakeup Sources](https://learnmasterypath.com/s32k-mastery-path/level-2/05-low-power-modes/)
 
 ## Exercise
 
