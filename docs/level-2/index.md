@@ -1,3 +1,7 @@
+---
+description: "Level 2 (Intermediate) of the free FreeRTOS Mastery Path. Move beyond the FreeRTOS core API — stream continuous data with stream and message buffers…"
+---
+
 # Level 2 · Intermediate <span class="level-badge">Intermediate</span>
 
 Goal: move beyond the FreeRTOS core API — stream continuous data with stream

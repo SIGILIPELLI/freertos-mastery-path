@@ -1,3 +1,7 @@
+---
+description: "Level 4 (Master) of the free FreeRTOS Mastery Path. Operate at the level of a principal real-time firmware engineer — safety-certified kernels, formal…"
+---
+
 # Level 4 · Master <span class="level-badge">Master</span>
 
 Goal: operate at the level of a principal real-time firmware engineer —

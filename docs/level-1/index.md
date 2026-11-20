@@ -1,3 +1,7 @@
+---
+description: "Level 1 (Entry) of the free FreeRTOS Mastery Path. Understand what a real-time operating system is for, and get genuinely comfortable with the FreeRTOS core…"
+---
+
 # Level 1 · Entry <span class="level-badge">Foundations</span>
 
 Goal: understand what a real-time operating system is for, and get genuinely

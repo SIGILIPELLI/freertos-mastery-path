@@ -1,3 +1,7 @@
+---
+description: "Level 3 (Advanced) of the free FreeRTOS Mastery Path. Open the hood — understand how the FreeRTOS kernel actually works (lists, ready lists, the context…"
+---
+
 # Level 3 · Advanced <span class="level-badge">Advanced</span>
 
 Goal: open the hood — understand how the FreeRTOS kernel actually works

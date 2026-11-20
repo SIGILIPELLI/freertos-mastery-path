@@ -1,6 +1,6 @@
 ---
 title: "Learn FreeRTOS Free: Beginner to Master Course"
-description: "Free FreeRTOS course from beginner to advanced -- hands-on real-time OS lessons with real projects. Part of a 37-course free learning library."
+description: "Free FreeRTOS course from beginner to advanced -- hands-on real-time OS lessons with real projects. Part of a 100+ course free learning library."
 ---
 
 # FreeRTOS Mastery Path
