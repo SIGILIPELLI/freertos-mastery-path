@@ -81,8 +81,8 @@ not_in_nav: |
 
 nav:
   - Home: index.md
-  - "💼 Interview Questions": interview-questions.md
-  - "📋 Cheat Sheet": cheat-sheet.md
+  - Interview Questions: interview-questions.md
+  - Cheat Sheet: cheat-sheet.md
   - "Level 1 · Entry":
       - Overview: level-1/index.md
       - "01 · Why an RTOS?": level-1/01-why-an-rtos.md
@@ -131,5 +131,5 @@ nav:
       - "Multi-Core AMP Architectures": level-4/08-multicore-amp.md
       - "Long-Term Maintenance & LTS Strategy": level-4/09-lts-maintenance.md
       - "Capstone — Production RTOS Product": level-4/10-capstone-production-product.md
-  - "🎯 Final Quiz": quiz.md
+  - Final Quiz: quiz.md
 
