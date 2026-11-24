@@ -21,8 +21,3 @@ and structure real firmware with proven RTOS design patterns.
 8. [Gatekeeper Tasks & Design Patterns](08-gatekeeper-patterns.md)
 9. [Watchdogs & Task Supervision](09-watchdogs-supervision.md)
 10. [Project — Multi-Sensor Gateway](10-project-multi-sensor-gateway.md)
-
-!!! info "Content status"
-    Level 2 module content is being written — every page below has its
-    scope defined and will be filled in next. [Level 1](../level-1/index.md)
-    is complete and is the prerequisite for everything here.
