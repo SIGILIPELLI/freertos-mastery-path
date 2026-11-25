@@ -9,7 +9,7 @@ A structured, module-wise FreeRTOS training program that takes you from
 "what is a real-time operating system?" to master-level real-time firmware
 design — tasks, queues, semaphores, timers, interrupts, kernel internals, and
 production RTOS architecture, with real compilable C/C++ code in every module
-and a hands-on project at the end of each level.
+and a hands-on project at the end of Levels 1–3 and a capstone at the end of Level 4.
 
 **No hardware required to start.** Level 1 uses the **ESP32 Arduino
 framework, which ships with FreeRTOS built in**, so every example runs in the
@@ -39,8 +39,7 @@ and QEMU are covered as alternatives too.
   [Embedded Systems Mastery Path](https://learnmasterypath.com/embedded-mastery-path/)
   covers boards, GPIO, serial, and sensors from scratch — this site focuses on
   the RTOS layer.
-- Each level ends with a project that combines everything learned in that
-  level.
+- Levels 1–3 each end with a project that combines everything learned in that level, and Level 4 ends with the course capstone.
 - Use the search bar (top of the page) to jump straight to a topic.
 
 Start here → [Level 1 · Entry](level-1/index.md)
